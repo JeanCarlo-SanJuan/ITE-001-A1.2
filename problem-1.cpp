@@ -46,7 +46,8 @@ int get_place_method_2(int num, int pos) {
     int result;
     int real_place = pow(10, pos + 1);
 
-    if (real_place / 10 > num) {
+    // The place value is automatically zero when:
+    if (real_place / 10 > num || pos < 0) {
         return 0;
     }
 
@@ -81,12 +82,11 @@ int get_place_method_3(int num, int index) {
     return int(_num[len - index] - '0');
 }
 
-const int size = 6;
-int main() {
-    cout << get_place_method_3(1234, 2);
-    int ints[size] = {51, 1282, 2236, 229, 120, 17};
-    int outputs[3][size];
+const int size = 6;    
+int ints[size] = {51, 1282, 2236, 229, 120, 17};
+int outputs[3][size];
 
+int main() {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < size; j++) {
             //Uncomment the next line to use a different set of numbers
