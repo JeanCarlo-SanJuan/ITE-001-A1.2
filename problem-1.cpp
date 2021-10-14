@@ -41,29 +41,36 @@ int hundreds(int num) {
     return num % 1000 - tens(num) - ones(num);
 }
 
-//Method 2
-// Congruence Modulo by Recursion
-int byCongruenceModulo(int num, int place) {
-    int real_place = pow(10, place);
-    int res = num % real_place;
-    int final_res;
-    if (place != 1) {
-        final_res = res - byCongruenceModulo(res, --place);
-    } else {
-        final_res = res;
+// Method 2 using division, modulus, and float to int typecasting
+int get_place_method_2(int num, int pos) {
+    int result;
+    int real_place = pow(10, pos + 1);
+
+    if (real_place / 10 > num) {
+        return 0;
     }
 
-    return final_res;
+    result = int(num % real_place);
+
+    while (result > 9) {
+        result = int(result / 10);
+    }
+    
+    return result;
 }
 
-//Method 3
-// Gets the place value of an integer by converting it into a string (which is an array of characters) 
-// where the place value corresponds to the index position.
+// Description
+// (1) consider an integer as a string.
+// (2) Consider a string as a 1D array of characters.
+// We can get the place value digit by using its equivalent index position.
+// To determine the index position, count the number of zeros in the desired place value
+// Ones = 1 has zero 0s hence index = 0
+// Tens = 10 has one 0s hence index = 1
+// Hundreds = 100 has two 0s hence index = 2
 // Example:
 // Say you wanna know the hundreds digit of 1234,
-// to do so call "get_place(1234, 1)" which returns 2
-// To know the argument the index variable start counting from 0 then increment by 1 from left to right.
-int get_place(int num, int index) {
+// to do so call "get_place(1234, 2)" which returns 2
+int get_place_method_3(int num, int index) {
     string _num = to_string(num);
     int len = _num.length() - 1;
 
@@ -76,19 +83,17 @@ int get_place(int num, int index) {
 
 const int size = 6;
 int main() {
+    cout << get_place_method_3(1234, 2);
     int ints[size] = {51, 1282, 2236, 229, 120, 17};
-    int _ones[size];
-    int _tens[size];
-    int _hundreds[size];
+    int outputs[3][size];
 
-    for (int i = 0; i < size; i++) {
-        //ints[i] = ask_int("Enter integer #" + to_string(i + 1) + ": ");
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < size; j++) {
+            //Uncomment the next line to use a different set of numbers
+            //ints[j] = ask_int("Enter integer #" + to_string(j + 1) + ": ");
+            outputs[i][j] = get_place_method_3(ints[j], i);
+        }
 
-        _ones[i] = get_place(ints[i], 0);
-        _tens[i] = get_place(ints[i], 1);
-        _hundreds[i] = get_place(ints[i], 2);
-    } 
-    cout << sigma(_ones, size) << endl;
-    cout << sigma(_tens, size) << endl;
-    cout << sigma(_hundreds, size) << endl;
+        cout << "digit at position " << i + 1 << ": " << sigma(outputs[i], size) << endl;
+    }
 }
