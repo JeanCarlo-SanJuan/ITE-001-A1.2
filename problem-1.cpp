@@ -94,6 +94,6 @@ int main() {
             outputs[i][j] = get_place_method_3(ints[j], i);
         }
 
-        cout << "digit at position " << i + 1 << ": " << sigma(outputs[i], size) << endl;
+        cout << "summation of digits at position " << i + 1 << ": " << sigma(outputs[i], size) << endl;
     }
 }
