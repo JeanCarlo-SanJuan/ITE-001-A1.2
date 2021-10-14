@@ -1,7 +1,6 @@
 #include <iostream>
-#include <math.h>
+#include <cmath>
 using namespace std;
-const int size = 6;
 
 int sigma(int array[], int len) {
     int sum = 0;
@@ -58,8 +57,12 @@ int byCongruenceModulo(int num, int place) {
 }
 
 //Method 3
-// By int to str type conversion
-// Gets the place value as the value of an array at position index. 
+// Gets the place value of an integer by converting it into a string (which is an array of characters) 
+// where the place value corresponds to the index position.
+// Example:
+// Say you wanna know the hundreds digit of 1234,
+// to do so call "get_place(1234, 1)" which returns 2
+// To know the argument the index variable start counting from 0 then increment by 1 from left to right.
 int get_place(int num, int index) {
     string _num = to_string(num);
     int len = _num.length() - 1;
@@ -71,19 +74,19 @@ int get_place(int num, int index) {
     return int(_num[len - index] - '0');
 }
 
+const int size = 6;
 int main() {
     int ints[size] = {51, 1282, 2236, 229, 120, 17};
     int _ones[size];
     int _tens[size];
     int _hundreds[size];
-    int current;
 
     for (int i = 0; i < size; i++) {
         //ints[i] = ask_int("Enter integer #" + to_string(i + 1) + ": ");
 
-        _ones[i] = get_place(ints[i], 1);
-        _tens[i] = get_place(ints[i], 2);
-        _hundreds[i] = get_place(ints[i], 3);
+        _ones[i] = get_place(ints[i], 0);
+        _tens[i] = get_place(ints[i], 1);
+        _hundreds[i] = get_place(ints[i], 2);
     } 
     cout << sigma(_ones, size) << endl;
     cout << sigma(_tens, size) << endl;
