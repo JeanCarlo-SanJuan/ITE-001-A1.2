@@ -63,7 +63,7 @@ int get_place_method_2(int num, int pos) {
 // Description
 // (1) consider an integer as a string.
 // (2) Consider a string as a 1D array of characters.
-// We can get the place value digit by using its equivalent index position.
+// We can get the place value digit by finding a digit's corresponding index position in the array.
 // To determine the index position, count the number of zeros in the desired place value
 // Ones = 1 has zero 0s hence index = 0
 // Tens = 10 has one 0s hence index = 1
@@ -83,10 +83,12 @@ int get_place_method_3(int num, int index) {
 }
 
 const int size = 6;    
-int ints[size] = {51, 1282, 2236, 229, 120, 17};
 int outputs[3][size];
+int ints[size] = {51, 1282, 2236, 229, 120, 17};
+string place_val[3] = {"ones", "tens", "hundreds"};
 
 int main() {
+    cout << "summation of digits in the...\n";
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < size; j++) {
             //Uncomment the next line to use a different set of numbers
@@ -94,6 +96,6 @@ int main() {
             outputs[i][j] = get_place_method_3(ints[j], i);
         }
 
-        cout << "summation of digits at position " << i + 1 << ": " << sigma(outputs[i], size) << endl;
+        cout << place_val[i] << " place is " << sigma(outputs[i], size) << endl;
     }
 }
