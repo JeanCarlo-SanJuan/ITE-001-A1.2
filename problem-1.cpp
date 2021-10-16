@@ -70,7 +70,7 @@ int get_place_method_2(int num, int pos) {
 // Hundreds = 100 has two 0s hence index = 2
 // Example:
 // Say you wanna know the hundreds digit of 1234,
-// to do so call "get_place(1234, 2)" which returns 2
+// to do so call "get_place_method_3(1234, 2)" which returns 2
 int get_place_method_3(int num, int index) {
     string _num = to_string(num);
     int len = _num.length() - 1;

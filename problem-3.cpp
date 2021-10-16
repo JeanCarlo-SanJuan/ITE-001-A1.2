@@ -7,9 +7,11 @@ int main() {
     int X_AREA;
     double width;
     double length;
+
     // Formula for the area of a rectangle: l * w
     // A = 4w * w
     // A = 4w^2
+
     cout << "Enter X_AREA: ";
     cin >> X_AREA;
 
@@ -18,6 +20,7 @@ int main() {
     //           X_AREA = 4 (w^2 - 1)
     //       X_AREA / 4 = w^2 - 1
     // (X_AREA / 4) + 1 = w^2
+    
     width = sqrt((X_AREA / 4) + 1);
     length = width * 4;
     cout << "Width: " << width << endl;
