@@ -54,7 +54,7 @@ int get_place(int num, int pos) {
 // Description
 // (1) consider an integer as a string.
 // (2) Consider a string as a 1D array of characters.
-// We can get the place value digit by finding a digit's corresponding index position in the array.
+// We can get the place value digit by finding the corresponding index position of the digit from the array.
 // To determine the index position, count the number of zeros in the desired place value
 // Ones = 1 has zero 0s hence index = 0
 // Tens = 10 has one 0s hence index = 1
@@ -70,6 +70,8 @@ int get_place_method_2(int num, int index) {
         return 0;
     }
 
+    // The operation below relates to the ASCII encoding standard.
+    //To get the correct integer value, subtract the char from _num and the char '0',
     return int(_num[len - index] - '0');
 }
 
@@ -99,6 +101,7 @@ void do_algorithm(int method) {
 }
 
 int main() {
+    // The algorithms calculate the summation of place value digits from an array of integers.
     do_algorithm(1);
     do_algorithm(2);
 }
