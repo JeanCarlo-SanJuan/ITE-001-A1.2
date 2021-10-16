@@ -12,6 +12,7 @@ int sigma(int array[], int len) {
     return sum;
 }
 
+// Input validation
 int ask_int(string question) {
     int num;
     while (1) {
@@ -27,32 +28,22 @@ int ask_int(string question) {
     }
 }
 
-//Method 1
-// Congruence Modulo (hard coded);
-int ones(int num) {
-    return num % 10;
-}
-
-int tens(int num) {
-    return num % 100 - ones(num);
-}
-
-int hundreds(int num) {
-    return num % 1000 - tens(num) - ones(num);
-}
-
-// Method 2 using division, modulus, and float to int typecasting
-int get_place_method_2(int num, int pos) {
+// Method 1 using division, modulus, and float to int typecasting
+int get_place(int num, int pos) {
     int result;
     int real_place = pow(10, pos + 1);
 
     // The place value is automatically zero when:
+    // 1: The integer doesn't have the required place value
     if (real_place / 10 > num || pos < 0) {
         return 0;
     }
 
-    result = int(num % real_place);
+    // To get the last n digits of number, do a modulus operation by 10^n (This is called congruence magic);
+    result = num % real_place;
 
+    // The place value digit that we want is in the leftmost digit.
+    // To get that digit we divide by 10 and keep the integer result.
     while (result > 9) {
         result = int(result / 10);
     }
@@ -71,7 +62,7 @@ int get_place_method_2(int num, int pos) {
 // Example:
 // Say you wanna know the hundreds digit of 1234,
 // to do so call "get_place_method_3(1234, 2)" which returns 2
-int get_place_method_3(int num, int index) {
+int get_place_method_2(int num, int index) {
     string _num = to_string(num);
     int len = _num.length() - 1;
 
@@ -82,20 +73,32 @@ int get_place_method_3(int num, int index) {
     return int(_num[len - index] - '0');
 }
 
-const int size = 6;    
+const int size = 6;   // Change this constant to alter the number of integers to be used
 int outputs[3][size];
+
+// Optional: Change the array elements
 int ints[size] = {51, 1282, 2236, 229, 120, 17};
 string place_val[3] = {"ones", "tens", "hundreds"};
 
-int main() {
-    cout << "summation of digits in the...\n";
+void do_algorithm(int method) {
+    cout << "\nUsing algorithm " << method << endl << "Summation of digits in the...\n";
+
     for (int i = 0; i < 3; i++) {
+        cout << place_val[i] << " place: ";
+
         for (int j = 0; j < size; j++) {
-            //Uncomment the next line to use a different set of numbers
+            //Uncomment the next line to use a different set of integers
             //ints[j] = ask_int("Enter integer #" + to_string(j + 1) + ": ");
-            outputs[i][j] = get_place_method_3(ints[j], i);
+            outputs[i][j] = (method == 1) ? get_place(ints[j], i) : get_place_method_2(ints[j], i);
+
+            cout << outputs[i][j] << ((j < size -1) ? " + ": " = ");
         }
 
-        cout << place_val[i] << " place is " << sigma(outputs[i], size) << endl;
+        cout << sigma(outputs[i], size) << endl;
     }
+}
+
+int main() {
+    do_algorithm(1);
+    do_algorithm(2);
 }
