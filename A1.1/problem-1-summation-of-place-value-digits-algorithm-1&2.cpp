@@ -100,6 +100,7 @@ void do_algorithm(int method) {
     }
 }
 
+// Contributed by JC San Juan
 int main() {
     // The algorithms calculate the summation of place value digits from an array of integers.
     do_algorithm(1);

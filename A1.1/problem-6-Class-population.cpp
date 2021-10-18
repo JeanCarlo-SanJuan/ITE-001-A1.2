@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// Contributed by JC San Juan
 int main() {
     int boys_count, girls_count, population;
     

@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// Contributed by JC San Juan
 int main() {
     int X_AREA;
     double width;

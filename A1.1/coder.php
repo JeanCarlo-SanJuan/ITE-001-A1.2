@@ -16,24 +16,26 @@
 <body>
     <?php
         $files = [
-            "./problem-1-summation-of-place-value-digits-algorithm-1&2.cpp",
-            "./problem-1-summation-of-place-value-digits-algorithm-3.cpp",
-            "./problem-2-daily-sales.cpp",
-            "./problem-3-Area-of-Rectangle.cpp",
-            "./problem-4.cpp",
-            "./problem-5.cpp",
-            "./problem-6-Class-population.cpp",
-            "./problem-7-Volume-of-Object.cpp"
+            "Problem 1 - Algorithm 1 & 2" => "problem-1-summation-of-place-value-digits-algorithm-1&2.cpp",
+            "Problem 1 - Algorithm 3" => "problem-1-summation-of-place-value-digits-algorithm-3.cpp",
+            "Problem 2" => "problem-2-daily-sales.cpp",
+            "Problem 3" => "problem-3-Area-of-Rectangle.cpp",
+            "Problem 4" => "problem-4-Credit-Card-Interest.cpp",
+            "Problem 5" => "problem-5.cpp",
+            "Problem 6" => "problem-6-Class-population.cpp",
+            "Problem 7" => "problem-7-Volume-of-Object.cpp"
         ];
 
-        foreach($files as $file) {
-                $e =  file_get_contents($file);
-                echo
-                    "<h1>$file</h1>"
+        foreach($files as $title => $file) {
+            echo
+                "<section>
+                    <h1>$title</h1>
+                    <h2>Filename: $file</h2>"
                     . "<pre>" 
-                        . strval(htmlspecialchars($e)) 
-                    . "</pre>";
-            }
+                        . strval(htmlspecialchars( file_get_contents($file) )) 
+                    . "</pre>
+                </section>";
+        }
     ?>
 </body>
 </html>
