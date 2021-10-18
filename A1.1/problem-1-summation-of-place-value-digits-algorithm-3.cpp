@@ -59,6 +59,7 @@ void getSum(string name, int stop) {
   cout << " = " << output << endl;
 }
 
+// Contributed by Sons Justin Paraiso Garcia
 int main() {
   getSum("Ones", ONES);
   getSum("Tens", TENS);
