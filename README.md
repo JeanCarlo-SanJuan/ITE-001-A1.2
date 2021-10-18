@@ -1,10 +1,10 @@
 # ITE-001-Prelim-G2
 
 Members:
-Buggati Aaron Fernandez 
-Cyrill Estiquio
-Sons Justin Garcia
-Jean Carlo San Juan
+1) Estiquio, Cyrill
+2) Fernandez, Buggati Aaron
+3) Garcia, Sons Justin
+4) San Juan, Jean Carlo
 
 Note:
 Do not include the coders.php file. 
