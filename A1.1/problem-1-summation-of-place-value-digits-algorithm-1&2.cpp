@@ -24,7 +24,7 @@ int ask_int(string question) {
             cin.ignore('\n');
             continue;
         }
-        return int(num);
+        return num;
     }
 }
 
@@ -71,7 +71,7 @@ int get_place_method_2(int num, int index) {
     }
 
     // The operation below relates to the ASCII encoding standard.
-    //To get the correct integer value, subtract the char from _num and the char '0',
+    //Subtracting the char '0' and the value of _num at len - index gives us the correct int value.
     return int(_num[len - index] - '0');
 }
 
