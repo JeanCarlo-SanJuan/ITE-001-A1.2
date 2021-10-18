@@ -3,7 +3,7 @@
 using namespace std;
 
 
-// Contributed by Cyrill
+// Contributed by Cyrill Eustaquio
 int main()
 {
     float side1, side2, side3, area, s;

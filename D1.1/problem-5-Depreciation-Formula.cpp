@@ -2,10 +2,11 @@
 #include <iomanip>
 using namespace std;
 
+// Contributed by JC San Juan
 int main() {
     float purchase_price, years_of_service, salvage_value, yearly_depreciation;
 
-    cout << "Enter purchase price of an item: ";
+    cout << "Enter the purchase price of an item: ";
     cin >> purchase_price;
     cout << "Enter its expected years of service: ";
     cin >> years_of_service;

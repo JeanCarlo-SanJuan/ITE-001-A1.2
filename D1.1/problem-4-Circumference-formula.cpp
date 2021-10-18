@@ -2,7 +2,7 @@
 #include <iomanip>
 using namespace std;
 
-// Contributed by Cyrill
+// Contributed by Cyrill Eustaquio
 int main()
 {
     float radius, circumference;
