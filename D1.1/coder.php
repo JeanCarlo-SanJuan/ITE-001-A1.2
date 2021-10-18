@@ -29,7 +29,7 @@
         foreach($files as $file) {
                 $e =  file_get_contents($file);
                 echo
-                    "<h2>$file</h2>"
+                    "<h1>$file</h1>"
                     . "<pre>" 
                         . strval(htmlspecialchars($e)) 
                     . "</pre>";
