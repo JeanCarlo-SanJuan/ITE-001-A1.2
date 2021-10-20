@@ -10,6 +10,7 @@ int main() {
     double length;
 
     // Formula for the area of a rectangle: l * w
+    // Problem Specific:
     // A = 4w * w
     // A = 4w^2
 
