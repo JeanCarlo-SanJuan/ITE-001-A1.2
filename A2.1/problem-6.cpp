@@ -44,6 +44,21 @@ int require_int(string msg) {
     }
 }
 
+double require_double(string msg) {
+    double num;
+    while (1) {
+        cout << msg;
+        cin >> num;
+        if (cin.fail()) {
+            cin.clear();
+            cin.sync();
+            cin.ignore('\n');
+            continue;
+        }
+        return num;
+    }
+}
+
 int main() {
     int operation;
 
