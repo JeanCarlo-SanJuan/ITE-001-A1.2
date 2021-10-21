@@ -1,6 +1,11 @@
 #include <iostream>
 using namespace std;
 
+double max(double a, double b) {
+    // My implementation of the built-in max function found in the <algorithm> library to get the higher value from two numbers.
+    return (a > b) ? a:b;
+}
+
 // Input validation
 double require_double(string text) {
     double num;
@@ -25,13 +30,7 @@ void show_tie(string rank1, string rank2) {
     cout << "The " << rank1 << " and " << rank2 << " inputs are both the highest numbers\n\n";
 }
 
-int main() {
-    int a,b,c;
-
-    a = require_double("Enter the first number: ");
-    b = require_double("Enter the second number: ");
-    c = require_double("Enter the last number: ");
-
+void test(double a, double b, double c) {
     cout << "Input numbers are " << a << ", " << b << ", and " << c << endl;
 
     if (a == b) {
@@ -69,7 +68,29 @@ int main() {
         show_highest(b);
     } else {
         show_highest(c);
-    }
+    }}
 
+void real_max(double a, double b, double c) {
+    cout << "Expected: " << max(a, max(b,c)) << endl;
+}
+
+int main() {
+    int inputs[10][3] = {
+        {2,1,0},
+        {1,0,2},
+        {0,1,2},
+        {1,1,0},
+        {1,0,1},
+        {0,1,1},
+        {0,1,0},
+        {0,0,1},
+        {1,0,0},
+        {1,1,1}
+    };
+
+    for (int i = 0; i < 10; i++) {
+        test(inputs[i][0], inputs[i][1],inputs[i][2]);
+        real_max(inputs[i][0], inputs[i][1], inputs[i][2]);
+    }
     return 0;
 }
