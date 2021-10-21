@@ -72,6 +72,11 @@ int main() {
 
     operation = require_int("Enter option here: "); 
 
+    if (operation < 1 || operation > SIZE) {
+      cout << "Invalid Operation" << endl;
+      return 0;  // Early return
+    }
+
     x = require_double("Enter first number: ");
     y = require_double("Enter second number: ");
     
