@@ -2,27 +2,8 @@
 #include <iomanip>
 using namespace std;
 
-/* 
-Press 1 to ADD 
-Press 2 to Subtract 
-Press 3 to Multiply 
-Press 4 to Divide 
-Enter Option Here: ___ 
-Displaying the above is done ^
-
-Enter First Number: ___ 
-Enter Second Number: ___ 
-Output: ___ 
- 
-Note: 
-A.	Dividing with zero is not possible. 
-DONE - B.	Pressing other character, display “Invalid Operation”, then end the program. 
-C.	First Number, second number and the output can be a floating value. 
-D.	Round-off the output in 3 decimal places. 
-E.	You may add other possibilities to make the program better. 
- */
-
 const int SIZE = 5;
+
 string operations[SIZE] = {
     "Add",
     "Subtract",
@@ -32,21 +13,6 @@ string operations[SIZE] = {
 };
 
 // Input validation
-int require_int(string msg) {
-    int num;
-    while (1) {
-        cout << msg;
-        cin >> num;
-        if (cin.fail()) {
-            cin.clear();
-            cin.sync();
-            cin.ignore('\n');
-            continue;
-        }
-        return num;
-    }
-}
-
 double require_double(string msg) {
     double num;
     while (1) {
@@ -63,14 +29,14 @@ double require_double(string msg) {
 }
 
 int main() {
-    double x, y, ans;
     int operation;
+    double x, y, ans;
 
     for (int i = 0; i < SIZE; i++) {
         cout << "Press " << i + 1 << " to " << operations[i] << endl;
     }
 
-    operation = require_int("Enter option here: "); 
+    operation = int(require_double("Enter option here: "));
 
     if (operation < 1 || operation > SIZE) {
       cout << "Invalid Operation" << endl;
@@ -83,7 +49,6 @@ int main() {
     switch (operation)
     {
         case 1: // Addition
-            /* code */
             ans = x + y;
             break;
         case 2: // Subtraction
@@ -105,11 +70,11 @@ int main() {
             break;
         default:
             cout << "Invalid Operation";
-            return 0;
     }
 
     cout << "Output: ";
     
+    // When the answer is an integer just print it.
     if (ans == int(ans)) {
         cout << ans;
     } else {
