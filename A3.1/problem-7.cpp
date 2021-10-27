@@ -6,6 +6,7 @@ You may include added features to make the program better.
 
 
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ int balance = 1000000;
 
 void show_bal(bool pause = 0) {
     system("cls");
-    cout << "Current Balance: " << balance << endl;
+    cout << "Current Balance: Php " << fixed << setprecision(2) << balance * 0.01 << endl;
     if (pause) {
         system("pause");
         system("cls");
@@ -28,9 +29,10 @@ int main() {
     bool loggedIn = false;
 
     bool exitCode = false;
-    int action = 0;
+    int action;
 
     while(!exitCode) {
+        action = 0;
         cout << " ITE-001 Banking System: Main menu\n";
         cout << " 1. Check Balance\n";
         cout << " 2. Deposit\n";
@@ -55,7 +57,7 @@ int main() {
             cout << "Verification success!\n";
         }
 
-        int amount = 0;
+        float amount = 0;
 
         switch (action) {
             case 1:
@@ -74,7 +76,7 @@ int main() {
                             system("cls");
                             cout << "Cancelling deposit...\nReturning to main menu...\n";
                         } else {
-                            balance += amount;
+                            balance += amount * 100;
                             show_bal(1);
                         }
                         break;
@@ -94,7 +96,7 @@ int main() {
                             system("cls");
                             cout << "Withdrawal cancelled...\nReturning to main menu...\n";
                         } else {
-                            balance -= amount;
+                            balance -= amount * 100;
                             show_bal(1);
                         }
                         break;
