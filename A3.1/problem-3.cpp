@@ -1,19 +1,7 @@
-/* 3.	Create a program that will display the following series: (Prepare 3 versions of source codes using for loop, while loop, do while loop)  */
-
 #include <iostream>
-
 using namespace std;
 
-void opposite_series(int method, int start_val);
-
 int const SIZE = 4;
-
-int main() {
-    for (int i = 0; i < 3; i++) {
-        opposite_series(i, 85);
-    }
-    return 0;
-}
 
 void opposite_series(int method, int start_val) {
     int i = 0;
@@ -33,7 +21,6 @@ void opposite_series(int method, int start_val) {
                 cout << inputs[i] << "\t";
             }
             break;
-
         case 1: // while loop;      
             while (i < SIZE)
             {
@@ -56,7 +43,6 @@ void opposite_series(int method, int start_val) {
             }
             
             break;
-
         case 2: // do while loop
             do {
                 inputs[i] = start_val + i * 5;
@@ -81,4 +67,14 @@ void opposite_series(int method, int start_val) {
     }
 
     cout << endl;
+}
+
+int main() {
+    /* 3.	Create a program that will display the following series: 
+       (Prepare 3 versions of source codes using for loop, while loop, do while loop)  */
+
+    for (int i = 0; i < 3; i++) {
+        opposite_series(i, 85);
+    }
+    return 0;
 }
