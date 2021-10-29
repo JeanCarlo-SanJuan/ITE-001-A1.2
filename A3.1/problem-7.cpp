@@ -10,6 +10,8 @@ map<int, float> data = {
 };
 
 int pid = -1, operation;
+int attempts = 0;
+const int MAX_ATTEMPTS = 3;
 float amount;
 
 void show_menu();
@@ -82,18 +84,26 @@ void change_bal(int _pid, float _amount) {
 
 int main() {
 
-    while(true) {
+    while(attempts < MAX_ATTEMPTS) {
         show_menu();
 
         if (operation == 5) {
             break;
         }
 
-        cout << "User Authentication is required...\nEnter PID: ";
+        cout << "User Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PID: ";
         cin >> pid;
         pid = authenticate(pid);
 
-        if (pid != -1) {
+        if (pid == -1) {
+            attempts++;
+
+            if (attempts == MAX_ATTEMPTS) {
+                cout << "You have reached the maximum login attempts!\nEnding program...";
+            }
+        } else {
+            attempts = 0;
+
             show_bal((operation == 1));
 
             switch(operation) {
