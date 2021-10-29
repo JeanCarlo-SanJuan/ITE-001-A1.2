@@ -1,118 +1,169 @@
-/* 
-7.	Create a program that is able to do basic banking transactions. Presuppose that an existing account is available 
-with an initial balance of 10,000 pesos. To perform any transaction, ask the user to enter a valid PIN (Personal Identification Number- 445236). 
-You may include added features to make the program better. 
- */
-
-
 #include <iostream>
 #include <iomanip>
-
+#include <map>
 using namespace std;
 
-int pid = 445236;
-int balance = 1000000;
+map<int, float> data = {
+    {445236, 10000},
+    {000001, 100},
+    {000002, 200}
+};
+
+int pid = -1, operation;
+float amount;
+
+void show_menu();
+
+int authenticate(int _pid) {
+    for (auto pair: data) {
+        if (pair.first == _pid) {
+            return _pid;
+        }
+    }
+
+    cout << "acount not found!\n\n";
+    return -1;
+}
+
+void halt() {
+    cout << "\nPress any key to continue...\n";
+    cin.get();
+    cin.ignore(1);
+}
+
+error(int cause) {
+    switch (cause) {
+        case 'A':
+            cout << "Please enter valid amount.\n";
+            break;
+        case 'B':
+            cout << "You have insufficient balance to do the transaction!\n";
+            break;
+    }
+
+    halt();
+}
 
 void show_bal(bool pause = 0) {
-    system("cls");
-    cout << "Current Balance: Php " << fixed << setprecision(2) << balance * 0.01 << endl;
+    cout << "\nCurrent Balance of PID " << pid << ":\nPhp "
+     << fixed << setprecision(2) << data[pid] << endl;
     if (pause) {
-        system("pause");
-        system("cls");
+        halt();
+    }
+}
+
+void get_amount(string msg, string cancel, bool check_bal = false) {
+    cout << "Enter amount to be " + msg + ": ";
+    cin >> amount;
+
+    if (amount == 0) {
+        cout << "Cancelling " + cancel + "...\n";
+    } else 
+    if (amount < 0) {
+        error('A');
+        amount = 0;
+    } else
+    if (check_bal && amount > data[pid]) {
+        error('B');
+        amount = 0;
+    }
+}
+
+void change_bal(int _pid, float _amount) {
+    system("cls");
+
+    data[_pid] += _amount;
+    cout << "Transacation success!\n";
+
+    if (_pid == pid) {
+        show_bal(1);
     }
 }
 
 int main() {
-    system("cls");
 
-    int _pid;
-    bool loggedIn = false;
+    while(true) {
+        show_menu();
 
-    bool exitCode = false;
-    int action;
+        if (operation == 5) {
+            break;
+        }
 
-    while(!exitCode) {
-        action = 0;
-        cout << " ITE-001 Banking System: Main menu\n";
-        cout << " 1. Check Balance\n";
-        cout << " 2. Deposit\n";
-        cout << " 3. Withdraw\n";
-        cout << " 4. Exit\n";
-        cout << " Enter action: ";
-        cin >> action;
-        system("cls");
+        cout << "User Authentication is required...\nEnter PID: ";
+        cin >> pid;
+        pid = authenticate(pid);
 
-        if (action >= 1 && action <= 3) {
-            cout << "User Authentication is required...\n";
-            cout << "Enter PID: ";
-            cin >> _pid;
+        if (pid != -1) {
+            show_bal((operation == 1));
 
-            if (_pid != pid) {
-                system("cls");
-                cout << "Verification failed\n";
-                cout << "Please enter a valid PID.\n";
-                continue;
+            switch(operation) {
+                case 2:
+                    get_amount("deposited", "deposit");
+                    
+                    if (amount != 0) {
+                        change_bal(pid, amount);
+                    }
+                    
+                    break;                    
+                case 3:
+                    if (data[pid] == 0) {
+                        error('B');
+                    } else {
+                        get_amount("withdrawn", "withdrawal", true);
+
+                        if (amount != 0) {
+                            change_bal(pid, amount * -1);
+                        }
+                    }
+                    break;
+                case 4:
+                    if (data[pid] == 0) {
+                        error('B');
+                    } else {
+                        int target;
+                        cout << "Enter target account: ";
+                        cin >> target;
+
+                        target = authenticate(target);
+
+                        if (target != -1) {
+                            get_amount(
+                                "transferred to PID " + to_string(target),
+                                "fund transfer",
+                                true
+                            );
+
+                            if (amount != 0) {
+                                change_bal(target, amount);
+                                change_bal(pid, amount * -1);
+                            }
+                        }
+                    }
+
+                    break;
             }
-
-            cout << "Verification success!\n";
         }
-
-        float amount = 0;
-
-        switch (action) {
-            case 1:
-                /* Check Bal */
-                show_bal(1);
-                break;
-            case 2: /* Deposit */
-                while(true) {
-                    show_bal();
-                    cout << "Enter amount to be deposited: ";
-                    cin >> amount;
-
-                    if (amount >= 0) {
-
-                        if (amount == 0) {
-                            system("cls");
-                            cout << "Cancelling deposit...\nReturning to main menu...\n";
-                        } else {
-                            balance += amount * 100;
-                            show_bal(1);
-                        }
-                        break;
-                    } else {
-                        cout << "Please enter a valid amount!\n";
-                    }
-                }
-                break;
-            case 3: /* Withdrawal  */
-                while(true) {
-                    show_bal();
-                    cout << "Enter amount to be withdrawn: ";
-                    cin >> amount;
-
-                    if (amount >= 0 && amount <= balance) {
-                        if (amount == 0) {
-                            system("cls");
-                            cout << "Withdrawal cancelled...\nReturning to main menu...\n";
-                        } else {
-                            balance -= amount * 100;
-                            show_bal(1);
-                        }
-                        break;
-                    } else {
-                        cout << "Please enter a valid amount!\n";
-                    }
-                }
-                break;
-            case 4: /* Exit */
-                exitCode = true;
-                break;
-            default:
-                cout << "Invalid action!\n";
-        }
-
-    } 
+    }
 
     return 0;
+}
+
+void show_menu() {
+    int action = 0;
+    cout << " ITE-001 Banking System: Main menu\n";
+    cout << " 1. Check Balance\n";
+    cout << " 2. Deposit\n";
+    cout << " 3. Withdraw\n";
+    cout << " 4. Fund transfer\n";
+    cout << " 5. Exit\n";
+    cout << " Enter action: ";
+    cin >> action;
+    system("cls");
+
+    if (action >= 1 && action <= 5) {
+        operation = action;
+    } else {
+        show_menu();
+    }
+
 }

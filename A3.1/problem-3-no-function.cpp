@@ -23,6 +23,8 @@ int main() {
     (4) Repeat (1) to (3) for each of the three iterative control structures.
     */
 
+   cout << "Using for loop...\n";
+
     for (i = 0; i < ITERATIONS; i++)
     {
         cout << A + i * STEP << "\t";
@@ -33,7 +35,7 @@ int main() {
         cout << B + i * STEP << "\t";
     }
 
-    cout << endl;
+    cout << "\n\nUsing while loop...\n";
 
     i = 0;
     while (i < ITERATIONS)
@@ -49,9 +51,9 @@ int main() {
         i++;
     }
 
-    cout << endl;
-    i = 0;
+    cout << "\n\nUsing do while loop...\n";
 
+    i = 0;
     do {
         cout << A + i * STEP << "\t";
         i++;
