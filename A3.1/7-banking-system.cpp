@@ -23,12 +23,11 @@ int authenticate(int _pid) {
         }
     }
 
-    cout << "acount not found!\n\n";
     return -1;
 }
 
 void halt() {
-    cout << "\nPress any key to continue...\n";
+    cout << "\nPress enter to continue...\n";
     cin.get();
     cin.ignore(1);
 }
@@ -82,21 +81,43 @@ void change_bal(int _pid, float _amount) {
     }
 }
 
+void show_menu() {
+    int action = 0;
+    cout << " ITE-001 Banking System: Main menu\n";
+    cout << " 1. Check Balance\n";
+    cout << " 2. Deposit\n";
+    cout << " 3. Withdraw\n";
+    cout << " 4. Fund transfer\n";
+    cout << " 5. Open an account\n";
+    cout << " 6. Exit\n";
+    cout << " Enter action: ";
+    cin >> action;
+    system("cls");
+
+    if (action >= 1 && action <= 5) {
+        operation = action;
+    } else {
+        show_menu();
+    }
+
+}
+
 int main() {
 
     while(attempts < MAX_ATTEMPTS) {
         show_menu();
 
-        if (operation == 5) {
+        if (operation == 6) {
             break;
+        } else if (operation != 5) {
+            cout << "User Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PID: ";
+            cin >> pid;
+            pid = authenticate(pid);
         }
 
-        cout << "User Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PID: ";
-        cin >> pid;
-        pid = authenticate(pid);
-
-        if (pid == -1) {
+        if (operation != 5 && pid == -1) {
             attempts++;
+            cout << "acount not found!\n\n";
 
             if (attempts == MAX_ATTEMPTS) {
                 cout << "You have reached the maximum login attempts!\nEnding program...";
@@ -104,10 +125,12 @@ int main() {
         } else {
             attempts = 0;
 
-            show_bal((operation == 1));
-
             switch(operation) {
+                case 1:
+                    show_bal(1);
+                    break;
                 case 2:
+                    show_bal();
                     get_amount("deposited", "deposit");
                     
                     if (amount != 0) {
@@ -116,6 +139,7 @@ int main() {
                     
                     break;                    
                 case 3:
+                    show_bal();
                     if (data[pid] == 0) {
                         error('B');
                     } else {
@@ -127,6 +151,7 @@ int main() {
                     }
                     break;
                 case 4:
+                    show_bal();
                     if (data[pid] == 0) {
                         error('B');
                     } else {
@@ -147,8 +172,29 @@ int main() {
                                 change_bal(target, amount);
                                 change_bal(pid, amount * -1);
                             }
+                        } else {
+                            cout << "acount not found!\n\n";
                         }
                     }
+
+                    break;
+
+                case 5:
+                    int _pid = 0;
+                    while (pid == -1) {
+                        pid = authenticate(_pid);
+
+                        if (pid == -1) {
+                            pid = _pid;
+                            data[pid] = 0;
+                        } else {
+                            pid == -1;
+                        }
+
+                        _pid++;
+                    }
+                    cout << "Your new account has been created.\nPlease use the following PID: " << pid;
+                    show_bal(1);
 
                     break;
             }
@@ -156,24 +202,4 @@ int main() {
     }
 
     return 0;
-}
-
-void show_menu() {
-    int action = 0;
-    cout << " ITE-001 Banking System: Main menu\n";
-    cout << " 1. Check Balance\n";
-    cout << " 2. Deposit\n";
-    cout << " 3. Withdraw\n";
-    cout << " 4. Fund transfer\n";
-    cout << " 5. Exit\n";
-    cout << " Enter action: ";
-    cin >> action;
-    system("cls");
-
-    if (action >= 1 && action <= 5) {
-        operation = action;
-    } else {
-        show_menu();
-    }
-
 }
