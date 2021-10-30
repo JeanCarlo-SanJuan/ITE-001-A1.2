@@ -3,7 +3,13 @@
 #include <map>
 using namespace std;
 
-map<int, float> data = {
+/* 
+    Features added which were made possible by using a map data structure:
+    1. Account creation
+    2. Fund transfer
+ */
+
+map<int, float> balances = {
     {445236, 10000},
     {000001, 100},
     {000002, 200}
@@ -17,7 +23,7 @@ float amount;
 void show_menu();
 
 int authenticate(int _pid) {
-    for (auto pair: data) {
+    for (auto pair: balances) {
         if (pair.first == _pid) {
             return _pid;
         }
@@ -47,7 +53,7 @@ error(int cause) {
 
 void show_bal(bool pause = 0) {
     cout << "\nCurrent Balance of PID " << pid << ":\nPhp "
-     << fixed << setprecision(2) << data[pid] << endl;
+     << fixed << setprecision(2) << balances[pid] << endl;
     if (pause) {
         halt();
     }
@@ -64,7 +70,7 @@ void get_amount(string msg, string cancel, bool check_bal = false) {
         error('A');
         amount = 0;
     } else
-    if (check_bal && amount > data[pid]) {
+    if (check_bal && amount > balances[pid]) {
         error('B');
         amount = 0;
     }
@@ -73,7 +79,7 @@ void get_amount(string msg, string cancel, bool check_bal = false) {
 void change_bal(int _pid, float _amount) {
     system("cls");
 
-    data[_pid] += _amount;
+    balances[_pid] += _amount;
     cout << "Transacation success!\n";
 
     if (_pid == pid) {
@@ -140,7 +146,7 @@ int main() {
                     break;                    
                 case 3:
                     show_bal();
-                    if (data[pid] == 0) {
+                    if (balances[pid] == 0) {
                         error('B');
                     } else {
                         get_amount("withdrawn", "withdrawal", true);
@@ -152,7 +158,7 @@ int main() {
                     break;
                 case 4:
                     show_bal();
-                    if (data[pid] == 0) {
+                    if (balances[pid] == 0) {
                         error('B');
                     } else {
                         int target;
@@ -186,7 +192,7 @@ int main() {
 
                         if (pid == -1) {
                             pid = _pid;
-                            data[pid] = 0;
+                            balances[pid] = 0;
                         } else {
                             pid == -1;
                         }
