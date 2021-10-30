@@ -148,6 +148,7 @@ int main() {
                 case 2:
                     /* Deposit algorithm
                     1. Ask user for an amount to be deposited using get_amount function - validation will be handled it.
+                    2. Add the amount to the user's account;
                      */
                     show_bal();
                     get_amount("deposited", "deposit");
@@ -159,6 +160,8 @@ int main() {
                     /* Withdrawal algorithm:
                     1. Make sure the account's balance is greater than zero
                     2. Ask the user for an amount to be withdrawn using get_amount function - some validations will be handled there.
+                    2. Subtract the amount from the user's account;
+
                     */
                     show_bal();
                     if (balances[pid] == 0) {
@@ -175,7 +178,7 @@ int main() {
                 /* Fund transfer algorithm :
                 1. Make sure the account's balance is greater than zero
                 2. Prompt user to enter another pid to whom the funds are to be sent.
-                3. What happens next is similar to the deposit case replacing the target pid instead of the user's pid.
+                3. What happens next is a combindation of the withdrawal (from the user's account) and deposit (to the target account) cases respectively.
                  */
                     show_bal();
                     if (balances[pid] == 0) {
