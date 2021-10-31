@@ -53,8 +53,6 @@ void get_amount(string msg, string cancel, bool check_bal = false) {
         1. get user input 
         2. Set that as the value of the amount variable.
         3. Validate the amount variable.
-
-
      */
 
     cout << "Enter amount to be " + msg + ": ";
@@ -105,7 +103,7 @@ void show_menu() {
 }
 
 bool login() {
-    cout << "User Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PIN: ";
+    cout << "\nUser Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PIN: ";
     cin >> pin;
     pin = authenticate(pin);
 
@@ -114,7 +112,7 @@ bool login() {
         return true;
     } else {
         attempts++;
-        cout << "acount not found!\n\n";
+        cout << "\nacount not found!\n\n";
 
         if (attempts >= MAX_ATTEMPTS) {
             cout << "You have reached the maximum login attempts!\nEnding program...";
