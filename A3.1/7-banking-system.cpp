@@ -10,15 +10,16 @@ using namespace std;
  */
 
 map<int, float> balances = {
-    {445236, 10000},
     {000001, 100},
-    {000002, 200}
+    {000002, 200},
+    {445236, 10000},
 };
 
 int pid = -1, operation;
 int attempts = 0;
 const int MAX_ATTEMPTS = 3;
 float amount;
+bool exitCode = false;
 
 int authenticate(int _pid) {
     for (auto pair: balances) {
@@ -30,13 +31,7 @@ int authenticate(int _pid) {
     return -1;
 }
 
-void halt() {
-    cout << "\nPress enter to continue...\n";
-    cin.get();
-    cin.ignore(1);
-}
-
-error(int cause) {
+void error(int cause) {
     switch (cause) {
         case 'A':
             cout << "Please enter valid amount.\n";
@@ -45,16 +40,11 @@ error(int cause) {
             cout << "You have insufficient balance to do the transaction!\n";
             break;
     }
-
-    halt();
 }
 
-void show_bal(bool pause = 0) {
+void show_bal() {
     cout << "\nCurrent Balance of PID " << pid << ":\nPhp "
      << fixed << setprecision(2) << balances[pid] << endl;
-    if (pause) {
-        halt();
-    }
 }
 
 void get_amount(string msg, string cancel, bool check_bal = false) {
@@ -73,9 +63,9 @@ void get_amount(string msg, string cancel, bool check_bal = false) {
     // b. When the user enters zero consider this as cancelling the transaction then return to the main menu.
     if (amount == 0) {
         cout << "Cancelling " + cancel + "...\n";
-    } else 
+    }
     // a. Show error msg when the input is negative.
-    if (amount < 0) {
+    else if (amount < 0) {
         error('A');
         amount = 0;
     } else
@@ -92,9 +82,7 @@ void change_bal(int _pid, float _amount) {
     balances[_pid] += _amount;
     cout << "Transacation success!\n";
 
-    if (_pid == pid) {
-        show_bal(1);
-    }
+    if (_pid == pid) show_bal();
 }
 
 void show_menu() {
@@ -113,125 +101,141 @@ void show_menu() {
     if (action >= 1 && action <= 5) {
         operation = action;
     } else {
-        show_menu();
+        cout << "Invalid operation!\n";
     }
 
 }
 
-int main() {
+bool login() {
+    cout << "User Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PID: ";
+    cin >> pid;
+    pid = authenticate(pid);
 
-    while(attempts < MAX_ATTEMPTS) {
-        show_menu();
+    if (pid != -1) {
+        attempts = 0;
+        return true;
+    } else {
+        attempts++;
+        cout << "acount not found!\n\n";
 
-        if (operation == 6) {
-            break;
-        } else if (operation != 5) {
-            cout << "User Authentication is required...\nLogin attempts remaining: " << MAX_ATTEMPTS - attempts <<  "\nEnter PID: ";
-            cin >> pid;
-            pid = authenticate(pid);
+        if (attempts >= MAX_ATTEMPTS) {
+            cout << "You have reached the maximum login attempts!\nEnding program...";
+            exitCode = true;
         }
 
-        if (operation != 5 && pid == -1) {
-            attempts++;
-            cout << "acount not found!\n\n";
+        return false;
+    }
+}
 
-            if (attempts == MAX_ATTEMPTS) {
-                cout << "You have reached the maximum login attempts!\nEnding program...";
+int main() {
+
+    while(!exitCode && attempts < MAX_ATTEMPTS) {
+        show_menu();
+
+        if (operation == 6) break; //End program
+
+        if (operation >= 1 && operation <= 4) {
+            if (login()) {
+                show_bal(); // balance query is automatically done here
+            } else {
+                continue;
             }
-        } else {
-            attempts = 0;
+        }
 
-            switch(operation) {
-                case 1:
-                    show_bal(1);
-                    break;
-                case 2:
-                    /* Deposit algorithm
-                    1. Ask user for an amount to be deposited using get_amount function - validation will be handled it.
-                    2. Add the amount to the user's account;
-                     */
-                    show_bal();
-                    get_amount("deposited", "deposit");
-                    
-                    if (amount != 0) change_bal(pid, amount);
-                    
-                    break;                    
-                case 3:
-                    /* Withdrawal algorithm:
-                    1. Make sure the account's balance is greater than zero
-                    2. Ask the user for an amount to be withdrawn using get_amount function - some validations will be handled there.
-                    2. Subtract the amount from the user's account;
-
+        switch(operation) {
+            case 2:
+                /* Deposit algorithm
+                1. Ask user for an amount to be deposited using get_amount function - validation will be handled it.
+                2. Add the amount to the user's account;
                     */
-                    show_bal();
-                    if (balances[pid] == 0) {
-                        error('B');
+                get_amount("deposited", "deposit");
+
+                if (amount != 0) change_bal(pid, amount);
+                
+                break;                    
+            case 3:
+                /* Withdrawal algorithm:
+                1. Make sure the account's balance is greater than zero
+                2. Ask the user for an amount to be withdrawn using get_amount function - some validations will be handled there.
+                2. Subtract the amount from the user's account;
+
+                */
+                if (balances[pid] == 0) {
+                    error('B');
+                } else {
+                    get_amount("withdrawn", "withdrawal", true);
+
+                    if (amount != 0) change_bal(pid, amount * -1);
+                }
+                break;
+            case 4:
+            /* Fund transfer algorithm :
+            1. Make sure the account's balance is greater than zero
+            2. Prompt user to enter another pid to whom the funds are to be sent.
+            3. What happens next is a combindation of the withdrawal (from the user's account) and deposit (to the target account) cases respectively.
+                */
+                if (balances[pid] == 0) {
+                    error('B');
+                } else {
+                    int target;
+                    cout << "Enter target account: ";
+                    cin >> target;
+
+                    target = authenticate(target);
+
+                    if (target == -1) {
+                        cout << "acount not found!\n\n";
                     } else {
-                        get_amount("withdrawn", "withdrawal", true);
+                        get_amount(
+                            "transferred to PID " + to_string(target),
+                            "fund transfer",
+                            true
+                        );
 
                         if (amount != 0) {
+                            change_bal(target, amount);
                             change_bal(pid, amount * -1);
                         }
                     }
-                    break;
-                case 4:
-                /* Fund transfer algorithm :
-                1. Make sure the account's balance is greater than zero
-                2. Prompt user to enter another pid to whom the funds are to be sent.
-                3. What happens next is a combindation of the withdrawal (from the user's account) and deposit (to the target account) cases respectively.
-                 */
-                    show_bal();
-                    if (balances[pid] == 0) {
-                        error('B');
+                }
+
+                break;
+
+            case 5:
+                /* Algorithm for determining the new PID: 
+                Starting with zero, check if the account exists then increment by 1 until a non-existent account is found.
+                */
+                pid = -1;
+                int _pid = 0;
+                while (pid == -1) {
+                    pid = authenticate(_pid);
+                    
+                    if (pid != -1) {
+                        pid = -1;
                     } else {
-                        int target;
-                        cout << "Enter target account: ";
-                        cin >> target;
-
-                        target = authenticate(target);
-
-                        if (target == -1) {
-                            cout << "acount not found!\n\n";
-                        } else {
-                            get_amount(
-                                "transferred to PID " + to_string(target),
-                                "fund transfer",
-                                true
-                            );
-
-                            if (amount != 0) {
-                                change_bal(target, amount);
-                                change_bal(pid, amount * -1);
-                            }
-                        }
+                        pid = _pid;
+                        balances[pid] = 0;
                     }
+                    _pid++;
+                }
+                cout << "Your new account has been created.\nPlease use the following PID: " << pid;
+                show_bal();
+                break;
+        }
 
-                    break;
-
-                case 5:
-                    /* Algorithm for determining the new PID: 
-                    Starting with zero, check if the account exists then increment by 1 until a non-existent account is found.
-                    */
-                    int _pid = 0;
-                    while (pid == -1) {
-                        pid = authenticate(_pid);
-
-                        if (pid == -1) {
-                            pid = _pid;
-                            balances[pid] = 0;
-                        } else {
-                            pid == -1;
-                        }
-
-                        _pid++;
-                    }
-                    cout << "Your new account has been created.\nPlease use the following PID: " << pid;
-                    show_bal(1);
-
-                    break;
-            }
+        //Promp user
+        char action;
+        cout << "\nDo you want to continue?\n[Y or y] Yes\n [N or n] No\nEnter Here: ";
+        cin >> action;
+        switch(action) {
+            case 'Y': case 'y':
+                break;
+            default:
+                //End the program when user enters any other letter than Y.
+                exitCode = true;
         }
     }
 
+    cout << "\n--- End of Program ---\n";
     return 0;
 }
