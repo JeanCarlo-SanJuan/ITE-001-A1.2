@@ -13,7 +13,7 @@ int main() {
 
     if (ascii_char >= '0' && ascii_char <= '9')  
     {
-        res = "Digit";
+        res = "digit";
     } 
     else 
     if ((ascii_char >= 'a' && ascii_char <= 'z') || 
