@@ -5,7 +5,7 @@ using namespace std;
     //Prototypes
     void randomize_stocks(void);
 
-    //Global vars.
+//Global vars
 time_t current_time;
 const int CAT = 2;
 
@@ -25,16 +25,16 @@ string product_names[CAT][3] = {
 // determines...
 // i - category
 // j - product
-// k - price, stock, or slices
-float product_data[CAT][2][3] = {
+// k - price, stock, slices, quantity in cart
+float product_data[CAT][2][4] = {
     { // Bread
-        //{price per slice, stock in slices, slices per whole (1 means 1 whole )}
-        {5, 50, 1}, // Pandesal
-        {11, 45, 10} // Wheat Loaf
+        //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
+        {5, 50, 1, 0}, // Pandesal
+        {11, 45, 10, 0} // Wheat Loaf
     }, 
     { // Pastries
-        {18, 33, 1}, // Choco cookies
-        {30, 60, 6} // Mocha cake
+        {18, 33, 1, 0}, // Choco cookies
+        {30, 60, 6, 0} // Mocha cake
     }
 };
 
