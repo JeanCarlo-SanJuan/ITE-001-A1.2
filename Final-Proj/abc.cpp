@@ -20,8 +20,8 @@ using namespace std;
 //Global vars
 string G_USER, G_PASS, G_ICON, G_USERTEXT, G_PASSTEXT;
 // predefined valid username and password
-string username[4] = {"TIP", "Comp", "Godis", "hello"};
-string password[4] = {"tip44", "science45", "good", "world"};
+const string VALID_USERNAMES[4] = {"TIP", "Comp", "Godis", "hello"};
+const string VALID_PASSWORDS[4] = {"tip44", "science45", "good", "world"};
 
 time_t current_time;
 const int CATEGORY_COUNT = 2;
@@ -213,7 +213,9 @@ bool login()
 
     for (i = 0; i < 4; i++)
     {
-        if ((G_USER == username[i] && G_PASS == password[i]) || (G_USERTEXT == G_USER && G_PASSTEXT == G_PASS))
+        if ( G_USER == VALID_USERNAMES[i] && G_PASS == VALID_PASSWORDS[i]
+          || G_USERTEXT == G_USER && G_PASSTEXT == G_PASS
+           )
         {
             return true;
         }
