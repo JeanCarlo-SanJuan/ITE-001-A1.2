@@ -28,7 +28,7 @@ const int CATEGORY_COUNT = 2;
 const int PRODUCT_COUNT = 2;
 const int PRODUCT_DATA = 4;
 
-string product_names[CATEGORY_COUNT][PRODUCT_COUNT + 1] = {
+string G_PRODUCT_NAMES[CATEGORY_COUNT][PRODUCT_COUNT + 1] = {
     {
         "Bread", // First element in column contains category
         // Items
@@ -46,7 +46,7 @@ string product_names[CATEGORY_COUNT][PRODUCT_COUNT + 1] = {
 // i - category
 // j - product
 // k - price, stock, slices, quantity in cart
-float product_data[CATEGORY_COUNT][PRODUCT_COUNT][PRODUCT_DATA] = {
+float G_PRODUCT_DATA[CATEGORY_COUNT][PRODUCT_COUNT][PRODUCT_DATA] = {
     {
         // Bread
         //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
@@ -174,14 +174,16 @@ void paymentScreen() {
   cout << "--------------------------------------------------" << endl;
   for (int category = 0; category < CATEGORY_COUNT; category++) {
     for (int product = 0; product < PRODUCT_COUNT; product++) {
-      cout << product_names[category][product + 1] << " x ";
-      cout << product_data[category][product][3] << endl;
+      cout << G_PRODUCT_NAMES[category][product + 1] << " x ";
+      cout << G_PRODUCT_DATA[category][product][3] << endl;
     }
   }
 }
 
 bool login()
 {
+    // TODO: I'm not entirely sure what the flow here is?
+
     string password_input = "";
     char c;
 
@@ -227,22 +229,24 @@ void pause()
 
 void cls()
 {
+    // TODO: We can probably use macros or something here...
     system("cls||clear");
 }
 
 void randomize_stocks()
 {
+    // TODO: I think we can rename these variables
     int i, j;
     float *stocks;
     for (i = 0; i < CATEGORY_COUNT; i++)
     {
         for (j = 0; j < 2; j++)
         {
-            stocks = &product_data[i][j][1];
+            stocks = &G_PRODUCT_DATA[i][j][1];
             *stocks += current_time % 100;
-            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(product_data[i][j][2])) + 5;
+            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(G_PRODUCT_DATA[i][j][2])) + 5;
 
-            cout << product_data[i][j][1] << endl;
+            cout << G_PRODUCT_DATA[i][j][1] << endl;
         }
     }
 }
