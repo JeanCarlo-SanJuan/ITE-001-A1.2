@@ -24,9 +24,11 @@ string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
 
 time_t current_time;
-const int CAT = 2;
+const int CATEGORY_COUNT = 2;
+const int PRODUCT_COUNT = 2;
+const int PRODUCT_DATA = 4;
 
-string product_names[CAT][3] = {
+string product_names[CATEGORY_COUNT][PRODUCT_COUNT + 1] = {
     {
         "Bread", // First element in column contains category
         // Items
@@ -44,7 +46,7 @@ string product_names[CAT][3] = {
 // i - category
 // j - product
 // k - price, stock, slices, quantity in cart
-float product_data[CAT][2][4] = {
+float product_data[CATEGORY_COUNT][PRODUCT_COUNT][PRODUCT_DATA] = {
     {
         // Bread
         //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
@@ -170,8 +172,8 @@ void loadingScreen()
 void paymentScreen() {
   cout << "Receipt:" << endl;
   cout << "--------------------------------------------------" << endl;
-  for (int category = 0; category < CAT; category++) {
-    for (int product = 0; product < 2; product++) {
+  for (int category = 0; category < CATEGORY_COUNT; category++) {
+    for (int product = 0; product < PRODUCT_COUNT; product++) {
       cout << product_names[category][product + 1] << " x ";
       cout << product_data[category][product][3] << endl;
     }
@@ -232,7 +234,7 @@ void randomize_stocks()
 {
     int i, j;
     float *stocks;
-    for (i = 0; i < CAT; i++)
+    for (i = 0; i < CATEGORY_COUNT; i++)
     {
         for (j = 0; j < 2; j++)
         {
