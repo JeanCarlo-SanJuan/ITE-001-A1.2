@@ -166,18 +166,18 @@ void account_registration() {
 void loadingScreen()
 {
     cout << endl << endl;
-    cout << "               Loading ";
-    char x = 219;
+    cout << "               Loading";
 
     for (int i = 0; i < 35; i++)
     {
-        cout << x;
+        cout << ".";
+        cout.flush();
         if (i < 10)
-            this_thread::sleep_for (chrono::milliseconds(150));
-        if (i >= 10 && i < 20)
-            this_thread::sleep_for (chrono::milliseconds(20));
-        if (i >= 10)
-            this_thread::sleep_for (chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(150));
+        else if (i >= 10 && i < 20)
+            this_thread::sleep_for(chrono::milliseconds(20));
+        else
+            this_thread::sleep_for(chrono::milliseconds(25));
     }
 }
 
