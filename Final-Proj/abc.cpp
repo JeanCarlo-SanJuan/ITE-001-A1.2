@@ -100,7 +100,8 @@ int main()
         case MEMBER_LOGIN:
             login_success = login();
             if (!login_success) {
-                cout << "\n\n     Invalid account! Please try again.\n\n";
+                cout << "\n     Invalid account! Please try again.\n\n";
+                pause();
             }
             break;
         case GUESS_LOGIN:
@@ -221,7 +222,7 @@ void account_registration() {
     cin >> user;
     cout << "     " << icon[2] << "  Select Password: ";
     cin >> pass;
-    cout << "\n     " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
+    cout << "\n    " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
     pause();
 
     ofstream file;
@@ -236,7 +237,7 @@ bool has_slices(int cat, int item) {
 }
 void loadingScreen()
 {
-    /* cout << "\n\n               Loading ";
+    cout << "\n\n             Loading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -248,7 +249,7 @@ void loadingScreen()
             wait(90);
         if (i >= 10)
             wait(25);
-    } */
+    }
 }
 
 void paymentScreen() {
