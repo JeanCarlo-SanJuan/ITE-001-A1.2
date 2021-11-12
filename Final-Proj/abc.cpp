@@ -213,7 +213,7 @@ void pause()
 
 void cls()
 {
-    system("cls");
+    system("clear");
 }
 
 void randomize_stocks()
