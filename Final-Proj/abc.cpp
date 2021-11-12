@@ -13,6 +13,7 @@ using namespace std;
     void menuScreen();
     void welcomeScreen();
     void loadingScreen();
+    void paymentScreen();
     void randomize_stocks();
     void account_registration();
 
@@ -94,6 +95,7 @@ int main()
     if (login_success) {
         loadingScreen();
         menuScreen();
+        paymentScreen();
     } else {
         return main();
     }
@@ -163,6 +165,17 @@ void loadingScreen()
         if (i >= 10)
             this_thread::sleep_for (chrono::milliseconds(25));
     }
+}
+
+void paymentScreen() {
+  cout << "Receipt:" << endl;
+  cout << "--------------------------------------------------" << endl;
+  for (int category = 0; category < CAT; category++) {
+    for (int product = 0; product < 2; product++) {
+      cout << product_names[category][product + 1] << " x ";
+      cout << product_data[category][product][3] << endl;
+    }
+  }
 }
 
 bool login()
