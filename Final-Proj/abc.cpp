@@ -101,15 +101,14 @@ int main()
     return 0;
 }
 
-void welcomeScreen()
+void welcomeScreen ()
 {
-    cout << "     \xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2";
+    cout << "\n                          ------" << "  Welcome To  " << "------\n";
+    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2";
     cout << "\n     \xB2\xB2                                                               \xB2\xB2";
+    cout << "\n     \xB2\xB2                  | Automated Bakery Cashier |                 \xB2\xB2";
     cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2                       shop abcdefghijk                        \xB2\xB2";
-    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n\n";
+    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2\n\n\n";
 }
 
 // put the menu content here
@@ -117,12 +116,17 @@ void menuScreen()
 {
     randomize_stocks();
     cls();
-    cout << "\n     ~~~~~~~~~~~~~ Welcome Sample " << icon[1] << " ~~~~~~~~~~~~~~";
-    cout << "\n\n\n                          Menu";
-    cout << "\n\n                1. Sample    " << icon[2] << "    Php 10";
-    cout << "\n                2. Bread     " << icon[2] << "    Php 30";
-    cout << "\n                3. x         " << icon[2] << "    Php 40";
-    cout << "\n                4. y         " << icon[2] << "    Php 20\n\n\n";
+    cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~  Menu  ~~~~~~~~~~~~~~~~~~~\xB2\xB2";
+    cout << "\n             \xB2\xB2                                              \xB2\xB2";
+    cout << "\n             \xB2\xB2   1. Bread                                   \xB2\xB2";
+    cout << "\n             \xB2\xB2      - Pandesal                 5            \xB2\xB2";
+    cout << "\n             \xB2\xB2      - Wheat Loaf Bread                      \xB2\xB2";
+    cout << "\n             \xB2\xB2                                              \xB2\xB2";
+    cout << "\n             \xB2\xB2   2. Pastries                                \xB2\xB2";
+    cout << "\n             \xB2\xB2      - Chocolate Cookies        5            \xB2\xB2";
+    cout << "\n             \xB2\xB2      - Mocha Cake                            \xB2\xB2";
+    cout << "\n             \xB2\xB2                                              \xB2\xB2";
+    cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n";
 }
 
 void account_registration() {
