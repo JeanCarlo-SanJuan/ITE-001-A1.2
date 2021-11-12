@@ -8,11 +8,12 @@
 using namespace std;
     void cls();
     void pause();
-    bool Login();
+    bool login();
     void menuScreen();
     void welcomeScreen();
     void loadingScreen();
     void randomize_stocks();
+    void account_registration();
 
 //Global vars
 string user, pass, icon, usertxt, passtxt;
@@ -60,71 +61,44 @@ int main()
 {
     icon[1] = 3;
     icon[2] = 16;
-
+    bool login_success = false;
     cls();
     welcomeScreen();
 
-    do
-    {
-        cout << "     [1]  " << icon[2] << "  Register";
-        cout << "\n     [2]  " << icon[2] << "  Login";
-        cout << "\n     [3]  " << icon[2] << "  Guest Login";
-        cout << "\n\n     Your Option: ";
-        cin >> option;
+    cout << "     [1]  " << icon[2] << "  Register";
+    cout << "\n     [2]  " << icon[2] << "  Login";
+    cout << "\n     [3]  " << icon[2] << "  Guest Login";
+    cout << "\n\n     Your Option: ";
+    cin >> option;
 
-        if (option == 1)
-        {
+    switch (option) {
+        case 1:
             cls();
             welcomeScreen();
-
-            cout << "    Type your chosen username and password to register.";
-            cout << "\n\n     " << icon[2] << "  Select Username: ";
-            cin >> user;
-            cout << "     " << icon[2] << "  Select Password: ";
-            cin >> pass;
-            cout << "\n     " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
-            pause();
-
-            ofstream file;
-            file.open(user + ".txt");
-            file << user << "\n"
-                 << pass;
-            file.close();
-            main();
-        }
-        else if (option == 2)
-        {
-            bool status = Login();
-
-            if (!status)
-            {
-                do
-                {
-                    cout << "\n\n     Invalid! Try again.\n\n";
-                    pause();
-                    main();
-                    return 0;
-                } while (!status);
-                return 0;
+            account_registration();
+            break;
+        case 2:
+            login_success = login();
+            if (!login_success) {
+                cout << "\n\n     Invalid! Try again.\n\n";
             }
-            else
-            {
-                loadingScreen();
-                menuScreen();
-                return 1;
-            }
-        }
-        else if (option == 3)
-        {
-            loadingScreen();
-            menuScreen();
-        }
-        else if (option != 1 && option != 2 && option != 3)
-        {
+            break;
+        case 3:
+            login_success = true;
+            break;
+        default:
             welcomeScreen();
             cout << "     Please choose your option.\n\n";
-        }
-    } while (option != 1 && option != 2 && option != 3);
+    }
+
+    if (login_success) {
+        loadingScreen();
+        menuScreen();
+    } else {
+        return main();
+    }
+
+    return 0;
 }
 
 void welcomeScreen()
@@ -151,6 +125,22 @@ void menuScreen()
     cout << "\n                4. y         " << icon[2] << "    Php 20\n\n\n";
 }
 
+void account_registration() {
+    cout << "    Type your chosen username and password to register.";
+    cout << "\n\n     " << icon[2] << "  Select Username: ";
+    cin >> user;
+    cout << "     " << icon[2] << "  Select Password: ";
+    cin >> pass;
+    cout << "\n     " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
+    pause();
+
+    ofstream file;
+    file.open(user + ".txt");
+    file << user << "\n"
+        << pass;
+    file.close();
+}
+
 void loadingScreen()
 {
     cout << "\n\n               Loading ";
@@ -168,7 +158,7 @@ void loadingScreen()
     }
 }
 
-bool Login()
+bool login()
 {
     string pass = "";
     char c;
