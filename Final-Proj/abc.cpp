@@ -346,9 +346,8 @@ void ask_quantity(int category, int item) {
             cout << "Added to cart!\n";
             pause();
             return;
-        } else {
-            cout << "Not enough stock!\n";
         }
+        cout << "Not enough stock!\n";
 
     } else {
         cout << "Invalid input!\n";
