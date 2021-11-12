@@ -226,8 +226,8 @@ bool login()
 
     for (i = 0; i < 4; i++)
     {
-        if ( G_USER == VALID_USERNAMES[i] && G_PASS == VALID_PASSWORDS[i]
-          || G_USERTEXT == G_USER && G_PASSTEXT == G_PASS
+        if ( (G_USER == VALID_USERNAMES[i] && G_PASS == VALID_PASSWORDS[i])
+          || (G_USERTEXT == G_USER && G_PASSTEXT == G_PASS)
            )
         {
             return true;
