@@ -73,10 +73,11 @@ int main()
     cls();
     welcomeScreen();
 
-    cout << "     [1]  " << G_ICON[2] << "  Register";
-    cout << "\n     [2]  " << G_ICON[2] << "  Login";
-    cout << "\n     [3]  " << G_ICON[2] << "  Guest Login";
-    cout << "\n\n     Your Option: ";
+    cout << "     [1]  " << G_ICON[2] << "  Register" << endl;
+    cout << "     [2]  " << G_ICON[2] << "  Login" << endl;
+    cout << "     [3]  " << G_ICON[2] << "  Guest Login" << endl;;
+    cout << endl;
+    cout << "     Your Option: ";
     cin >> option;
 
     switch (option) {
@@ -86,7 +87,9 @@ int main()
         case MEMBER_LOGIN:
             login_success = login();
             if (!login_success) {
-                cout << "\n\n     Invalid account! Please try again.\n\n";
+                cout << endl << endl;
+                cout << "     Invalid account! Please try again.";
+                cout << endl << endl;
             }
             break;
         case GUESS_LOGIN:
@@ -107,12 +110,15 @@ int main()
 
 void welcomeScreen ()
 {
-    cout << "\n                          ------" << "  Welcome To  " << "------\n";
-    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2";
-    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2                  | Automated Bakery Cashier |                 \xB2\xB2";
-    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2\n\n\n";
+    cout << endl;
+    cout << "                          ------" << "  Welcome To  " << "------";
+    cout << endl << endl;
+    cout << "     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2" << endl;
+    cout << "     \xB2\xB2                                                               \xB2\xB2" << endl;
+    cout << "     \xB2\xB2                  | Automated Bakery Cashier |                 \xB2\xB2" << endl;
+    cout << "     \xB2\xB2                                                               \xB2\xB2" << endl;
+    cout << "     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2" << endl;
+    cout << endl << endl;
 }
 
 // put the menu content here
@@ -120,29 +126,34 @@ void menuScreen()
 {
     randomize_stocks();
     cls();
-    cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~  Menu  ~~~~~~~~~~~~~~~~~~~\xB2\xB2";
-    cout << "\n             \xB2\xB2                                              \xB2\xB2";
-    cout << "\n             \xB2\xB2   1. Bread                                   \xB2\xB2";
-    cout << "\n             \xB2\xB2      - Pandesal                 5            \xB2\xB2";
-    cout << "\n             \xB2\xB2      - Wheat Loaf Bread                      \xB2\xB2";
-    cout << "\n             \xB2\xB2                                              \xB2\xB2";
-    cout << "\n             \xB2\xB2   2. Pastries                                \xB2\xB2";
-    cout << "\n             \xB2\xB2      - Chocolate Cookies        5            \xB2\xB2";
-    cout << "\n             \xB2\xB2      - Mocha Cake                            \xB2\xB2";
-    cout << "\n             \xB2\xB2                                              \xB2\xB2";
-    cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n";
+    cout << endl;
+    cout << "             \xB2\xB2~~~~~~~~~~~~~~~~~~~  Menu  ~~~~~~~~~~~~~~~~~~~\xB2\xB2" << endl;
+    cout << "             \xB2\xB2                                              \xB2\xB2" << endl;
+    cout << "             \xB2\xB2   1. Bread                                   \xB2\xB2" << endl;
+    cout << "             \xB2\xB2      - Pandesal                 5            \xB2\xB2" << endl;
+    cout << "             \xB2\xB2      - Wheat Loaf Bread                      \xB2\xB2" << endl;
+    cout << "             \xB2\xB2                                              \xB2\xB2" << endl;
+    cout << "             \xB2\xB2   2. Pastries                                \xB2\xB2" << endl;
+    cout << "             \xB2\xB2      - Chocolate Cookies        5            \xB2\xB2" << endl;
+    cout << "             \xB2\xB2      - Mocha Cake                            \xB2\xB2" << endl;
+    cout << "             \xB2\xB2                                              \xB2\xB2" << endl;
+    cout << "             \xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2" << endl;
+    cout << endl;
 }
 
 void account_registration() {
     cls();
     welcomeScreen();
 
-    cout << "    Type your chosen username and password to register.";
-    cout << "\n\n     " << G_ICON[2] << "  Select Username: ";
+    cout << "    Type your chosen username and password to register." << endl;
+    cout << endl;
+    cout << "     " << G_ICON[2] << "  Select Username: ";
     cin >> G_USER;
     cout << "     " << G_ICON[2] << "  Select Password: ";
     cin >> G_PASS;
-    cout << "\n     " << G_ICON[1] << "  You're signed up! you may now use your account to login.\n\n";
+    cout << endl;
+    cout << "     " << G_ICON[1] << "  You're signed up! you may now use your account to login." << endl;
+    cout << endl;
     pause();
 
     ofstream file;
@@ -154,7 +165,8 @@ void account_registration() {
 
 void loadingScreen()
 {
-    cout << "\n\n               Loading ";
+    cout << endl << endl;
+    cout << "               Loading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -190,8 +202,9 @@ bool login()
     cls();
     welcomeScreen();
 
-    cout << "     Enter your username and password.";
-    cout << "\n\n     " << G_ICON[2] << "  Username: ";
+    cout << "     Enter your username and password." << endl;
+    cout << endl;
+    cout << "     " << G_ICON[2] << "  Username: ";
     cin >> G_USER;
     cout << "     " << G_ICON[2] << "  Password: ";
     // c = _getwch();
