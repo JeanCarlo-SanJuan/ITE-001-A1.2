@@ -158,8 +158,7 @@ void account_registration() {
 
     ofstream file;
     file.open(G_USER + ".txt");
-    file << G_USER << "\n"
-        << G_PASS;
+    file << G_USER << endl << G_PASS;
     file.close();
 }
 
