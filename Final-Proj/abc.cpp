@@ -235,18 +235,14 @@ void cls()
 
 void randomize_stocks()
 {
-    // TODO: I think we can rename these variables
-    int i, j;
-    float *stocks;
-    for (i = 0; i < CATEGORY_COUNT; i++)
-    {
-        for (j = 0; j < 2; j++)
-        {
-            stocks = &G_PRODUCT_DATA[i][j][1];
-            *stocks += current_time % 100;
-            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(G_PRODUCT_DATA[i][j][2])) + 5;
-
-            cout << G_PRODUCT_DATA[i][j][1] << endl;
-        }
+  float *stocks;
+  for (int category = 0; category < CATEGORY_COUNT; category++) {
+    for (int product = 0; product < PRODUCT_COUNT; product++) {
+      stocks = &G_PRODUCT_DATA[category][product][3];
+      *stocks += current_time % 100;
+      *stocks = (int(pow(*stocks, 2)) % 100)
+              + (current_time % int(G_PRODUCT_DATA[category][product][1]))
+              + 5;
     }
+  }
 }
