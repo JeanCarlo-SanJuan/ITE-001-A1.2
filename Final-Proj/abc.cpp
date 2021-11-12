@@ -34,7 +34,7 @@ string product_names[CAT][3] = {
     },
     {
         "Pastries",
-        "Chocolate Cookies"
+        "Chocolate Cookies",
         "Mocha Cake",
     }};
 
