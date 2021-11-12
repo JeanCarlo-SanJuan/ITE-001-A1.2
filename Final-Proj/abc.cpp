@@ -59,6 +59,10 @@ int i, option;
 
 int main()
 {
+    const int REGISTRATION = 1;
+    const int MEMBER_LOGIN = 2;
+    const int GUESS_LOGIN = 3;
+
     icon[1] = 3;
     icon[2] = 16;
     bool login_success = false;
@@ -72,23 +76,18 @@ int main()
     cin >> option;
 
     switch (option) {
-        case 1:
-            cls();
-            welcomeScreen();
+        case REGISTRATION:
             account_registration();
             break;
-        case 2:
+        case MEMBER_LOGIN:
             login_success = login();
             if (!login_success) {
-                cout << "\n\n     Invalid! Try again.\n\n";
+                cout << "\n\n     Invalid account! Please try again.\n\n";
             }
             break;
-        case 3:
+        case GUESS_LOGIN:
             login_success = true;
             break;
-        default:
-            welcomeScreen();
-            cout << "     Please choose your option.\n\n";
     }
 
     if (login_success) {
@@ -130,6 +129,9 @@ void menuScreen()
 }
 
 void account_registration() {
+    cls();
+    welcomeScreen();
+
     cout << "    Type your chosen username and password to register.";
     cout << "\n\n     " << icon[2] << "  Select Username: ";
     cin >> user;
