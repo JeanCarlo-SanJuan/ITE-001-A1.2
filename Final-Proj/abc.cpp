@@ -3,30 +3,45 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
+#include <thread>
 #include <cmath>
 #include <chrono>
 #include <thread>
 using namespace std;
     void cls();
+    void wait(int);
     void pause();
     bool login();
+    void print_item(int, string);
     void menuScreen();
     void welcomeScreen();
     void loadingScreen();
     void paymentScreen();
+    void show_stock(int, int);
     void randomize_stocks();
     void account_registration();
+    void ask_quantity(int, int);
+    bool has_slices(int, int);
+    void show_price(int, int );
 
 //Global vars
 string user, pass, icon, usertxt, passtxt;
 // predefined valid username and password
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
+string G_categories[] {
+    "Bread",
+    "Pastries",
+    "Checkout",
+    "Reset Cart",
+    "Exit Program"
+};
 
 time_t current_time;
 const int CAT = 2;
 
-string product_names[CAT][3] = {
+string G_product_names[CAT][3] = {
     {
         "Bread", // First element in column contains category
         // Items
@@ -37,14 +52,15 @@ string product_names[CAT][3] = {
         "Pastries",
         "Chocolate Cookies",
         "Mocha Cake",
-    }};
+    }
+};
 
-// product_data[i][j][k]
+// G_G_product_data[i][j][k]
 // determines...
 // i - category
 // j - product
 // k - price, stock, slices, quantity in cart
-float product_data[CAT][2][4] = {
+float G_product_data[CAT][2][4] = {
     {
         // Bread
         //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
@@ -57,24 +73,24 @@ float product_data[CAT][2][4] = {
         {30, 60, 6, 0}  // Mocha cake
     }};
 
-int i, option;
+int i, j;
 
 int main()
 {
+    int option;
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
-
     icon[1] = 3;
     icon[2] = 16;
     bool login_success = false;
     cls();
     welcomeScreen();
 
-    cout << "     [1]  " << icon[2] << "  Register";
-    cout << "\n     [2]  " << icon[2] << "  Login";
-    cout << "\n     [3]  " << icon[2] << "  Guest Login";
-    cout << "\n\n     Your Option: ";
+    cout << "     [1]  " << icon[2] << "  Register"
+    << "\n     [2]  " << icon[2] << "  Login"
+    << "\n     [3]  " << icon[2] << "  Guest Login"
+    << "\n\n     Your Option: ";
     cin >> option;
 
     switch (option) {
@@ -94,8 +110,8 @@ int main()
 
     if (login_success) {
         loadingScreen();
+        //randomize_stocks();
         menuScreen();
-        paymentScreen();
     } else {
         return main();
     }
@@ -113,12 +129,54 @@ void welcomeScreen ()
     cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2\n\n\n";
 }
 
+int get_action(string msg) {
+    int action;
+    cout << msg;
+    cin >> action;
+    return action;
+}
+
 // put the menu content here
 void menuScreen()
-{
-    randomize_stocks();
+{   
     cls();
-    cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~  Menu  ~~~~~~~~~~~~~~~~~~~\xB2\xB2";
+    cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~  Menu  ~~~~~~~~~~~~~~~~~~~\xB2\xB2\n";
+
+    for (i = 0; i < 5; i++) {
+        print_item(i + 1, G_categories[i]);
+    }
+
+    int action = get_action("\nWhat would you like to buy / do? ");
+
+    if (action >= 1 && action <= 2) {
+        // Go to sub-menu
+        int category = action - 1;
+        cout << G_product_names[category][0] << ":" << endl;
+        for (i = 1; i < 3; i++) {
+            print_item(i, G_product_names[category][i]);
+            show_stock(category, i - 1);
+            show_price(category, i - 1);
+        }
+        int item = get_action("Select item: ") - 1;
+
+        ask_quantity(category, item);
+    }
+    switch (action) {
+        case 3:
+            paymentScreen();
+            return;
+            break;
+        case 4:
+            break;
+            //Reset cart;
+        case 5:
+            break;
+            //end program
+    }
+
+    menuScreen();
+    /*
+    
     cout << "\n             \xB2\xB2                                              \xB2\xB2";
     cout << "\n             \xB2\xB2   1. Bread                                   \xB2\xB2";
     cout << "\n             \xB2\xB2      - Pandesal                 5            \xB2\xB2";
@@ -129,7 +187,30 @@ void menuScreen()
     cout << "\n             \xB2\xB2      - Mocha Cake                            \xB2\xB2";
     cout << "\n             \xB2\xB2                                              \xB2\xB2";
     cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n";
+ */}
+
+void show_price(int cat, int item) {
+    cout << "Price per " << ((has_slices(cat, item)) ? "slice":"item")
+    << " is Php " << G_product_data[cat][item][0] << endl;
 }
+
+void print_item(int nth, string item) {
+    cout << nth << ". " << item << endl;
+}
+
+void show_stock(int cat, int item) {
+    cout << "In stock: " << G_product_data[cat][item][1] << endl;
+}
+
+/* void show_item_info(int nth, int cat, int item_id) {
+    float price = G_product_data[cat][item][1];
+    int stock = G_product_data[cat][item][2];
+    string name = G_product_names[cat][item_id + 1];
+
+    cout << nth << ". " << name << 
+    "\t Stock =" << stock
+    "\t Price =" << price;
+} */
 
 void account_registration() {
     cls();
@@ -150,21 +231,24 @@ void account_registration() {
     file.close();
 }
 
+bool has_slices(int cat, int item) {
+    return G_product_data[cat][item][2] != 1;
+}
 void loadingScreen()
 {
-    cout << "\n\n               Loading ";
+    /* cout << "\n\n               Loading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
     {
         cout << x;
         if (i < 10)
-            this_thread::sleep_for (chrono::milliseconds(150));
+            wait(130);
         if (i >= 10 && i < 20)
-            this_thread::sleep_for (chrono::milliseconds(20));
+            wait(90);
         if (i >= 10)
-            this_thread::sleep_for (chrono::milliseconds(25));
-    }
+            wait(25);
+    } */
 }
 
 void paymentScreen() {
@@ -172,16 +256,17 @@ void paymentScreen() {
   cout << "--------------------------------------------------" << endl;
   for (int category = 0; category < CAT; category++) {
     for (int product = 0; product < 2; product++) {
-      cout << product_names[category][product + 1] << " x ";
-      cout << product_data[category][product][3] << endl;
+        cout << G_product_names[category][product + 1] << " x "
+        << G_product_data[category][product][3] << endl;
     }
   }
+
+  pause();
 }
 
 bool login()
 {
     string pass = "";
-    char c;
 
     cls();
     welcomeScreen();
@@ -190,16 +275,6 @@ bool login()
     cout << "\n\n     " << icon[2] << "  Username: ";
     cin >> user;
     cout << "     " << icon[2] << "  Password: ";
-    c = _getwch();
-
-    // display * as password
-    while (c != 13)
-    {
-        pass.push_back(c);
-        cout << '*';
-        c = _getwch();
-    }
-    cout << "\n";
 
     ifstream read(user + ".txt");
     getline(read, usertxt);
@@ -216,9 +291,9 @@ bool login()
 }
 
 void pause()
-{
+{   
     cout << "Press Enter to continue...";
-    cin.get();
+    cin.ignore().get();
 }
 
 void cls()
@@ -234,11 +309,50 @@ void randomize_stocks()
     {
         for (j = 0; j < 2; j++)
         {
-            stocks = &product_data[i][j][1];
+            stocks = &G_product_data[i][j][1];
             *stocks += current_time % 100;
-            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(product_data[i][j][2])) + 5;
+            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(G_product_data[i][j][2])) + 5;
 
-            cout << product_data[i][j][1] << endl;
+            cout << G_product_data[i][j][1] << endl;
         }
     }
+}
+
+void wait(int ms) {
+    this_thread::sleep_for(chrono::milliseconds(ms));
+}
+
+void ask_quantity(int category, int item) {
+    int slices = G_product_data[category][item][2];
+    int stock = G_product_data[category][item][1]; // Todo convert to pointer
+    string item_name = G_product_names[category][item + 1];
+    int input_slices = 0;
+    cls();
+    show_stock(category, item);
+
+    if (has_slices(category, item)) {
+        cout << "How many slices of " + item_name + " would you like to buy ( " << slices << " slices in 1 whole): ";
+    } else {
+        cout << "How many " + item_name + " would you like to buy? ";
+    }
+    // validation
+    cin >> input_slices;
+
+    if (input_slices > 0) {
+        if (input_slices <= stock) {
+            G_product_data[category][item][3] += input_slices;
+            G_product_data[category][item][1] -= input_slices;
+            cout << "Added to cart!\n";
+            pause();
+            return;
+        } else {
+            cout << "Not enough stock!\n";
+        }
+
+    } else {
+        cout << "Invalid input!\n";
+    }
+
+    pause();
+    return ask_quantity(category, item);
 }
