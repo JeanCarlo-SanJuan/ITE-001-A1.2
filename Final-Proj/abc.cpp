@@ -59,10 +59,10 @@ float G_PRODUCT_DATA[CATEGORY_COUNT][PRODUCT_COUNT][PRODUCT_DATA] = {
         {30, 60, 6, 0}  // Mocha cake
     }};
 
-int i, option;
-
 int main()
 {
+    int option;
+
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
@@ -209,7 +209,7 @@ bool login()
     getline(read, G_USERTEXT);
     getline(read, G_USERTEXT);
 
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         if ( (G_USER == VALID_USERNAMES[i] && G_PASS == VALID_PASSWORDS[i])
           || (G_USERTEXT == G_USER && G_PASSTEXT == G_PASS)
