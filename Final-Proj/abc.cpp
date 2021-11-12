@@ -1,10 +1,10 @@
-#include <iostream>
-#include <fstream>
-#include <string>
+#include <chrono>
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include <cmath>
-#include <chrono>
+#include <fstream>
+#include <iostream>
+#include <string>
 #include <thread>
 using namespace std;
     void cls();
