@@ -4,7 +4,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include <windows.h>
+#include <chrono>
+#include <thread>
 using namespace std;
     void cls();
     void pause();
@@ -156,11 +157,11 @@ void loadingScreen()
     {
         cout << x;
         if (i < 10)
-            Sleep(130);
+            this_thread::sleep_for (chrono::milliseconds(150));
         if (i >= 10 && i < 20)
-            Sleep(90);
+            this_thread::sleep_for (chrono::milliseconds(20));
         if (i >= 10)
-            Sleep(25);
+            this_thread::sleep_for (chrono::milliseconds(25));
     }
 }
 
