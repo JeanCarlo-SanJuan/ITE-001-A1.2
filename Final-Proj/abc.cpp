@@ -197,7 +197,7 @@ bool login()
     // TODO: I'm not entirely sure what the flow here is?
 
     string password_input = "";
-    char c;
+    // char c;
 
     cls();
     welcomeScreen();
