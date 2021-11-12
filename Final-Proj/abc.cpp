@@ -20,8 +20,8 @@ using namespace std;
 //Global vars
 string user, pass, icon, usertxt, passtxt;
 // predefined valid username and password
-string username[4] = {"TIP", "Comp", "Godis", "hello"};
-string password[4] = {"tip44", "science45", "good", "world"};
+string username[4] = {"Anna", "Jordan", "Willy", "Michael"};
+string password[4] = {"anna123", "jordan123", "willy123", "michael123"};
 
 time_t current_time;
 const int CAT = 2;
@@ -84,7 +84,8 @@ int main()
         case MEMBER_LOGIN:
             login_success = login();
             if (!login_success) {
-                cout << "\n\n     Invalid account! Please try again.\n\n";
+                cout << "\n     Invalid account! Please try again.\n\n";
+                pause();
             }
             break;
         case GUESS_LOGIN:
@@ -140,7 +141,7 @@ void account_registration() {
     cin >> user;
     cout << "     " << icon[2] << "  Select Password: ";
     cin >> pass;
-    cout << "\n     " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
+    cout << "\n    " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
     pause();
 
     ofstream file;
@@ -152,7 +153,7 @@ void account_registration() {
 
 void loadingScreen()
 {
-    cout << "\n\n               Loading ";
+    cout << "\n\n             Loading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -218,7 +219,7 @@ bool login()
 void pause()
 {
     cout << "Press Enter to continue...";
-    cin.get();
+    cin.ignore().get();
 }
 
 void cls()
