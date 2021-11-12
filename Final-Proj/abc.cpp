@@ -70,40 +70,40 @@ int main()
     G_ICON[1] = 3;
     G_ICON[2] = 16;
     bool login_success = false;
-    cls();
-    welcomeScreen();
 
-    cout << "     [1]  " << G_ICON[2] << "  Register" << endl;
-    cout << "     [2]  " << G_ICON[2] << "  Login" << endl;
-    cout << "     [3]  " << G_ICON[2] << "  Guest Login" << endl;;
-    cout << endl;
-    cout << "     Your Option: ";
-    cin >> option;
+    while (!login_success) {
+        cls();
+        welcomeScreen();
 
-    switch (option) {
-        case REGISTRATION:
-            account_registration();
-            break;
-        case MEMBER_LOGIN:
-            login_success = login();
-            if (!login_success) {
-                cout << endl << endl;
-                cout << "     Invalid account! Please try again.";
-                cout << endl << endl;
-            }
-            break;
-        case GUESS_LOGIN:
-            login_success = true;
-            break;
+        cout << "     [1]  " << G_ICON[2] << "  Register" << endl;
+        cout << "     [2]  " << G_ICON[2] << "  Login" << endl;
+        cout << "     [3]  " << G_ICON[2] << "  Guest Login" << endl;;
+        cout << endl;
+        cout << "     Your Option: ";
+        cin >> option;
+
+        switch (option) {
+            case REGISTRATION:
+                account_registration();
+                break;
+            case MEMBER_LOGIN:
+                login_success = login();
+                if (!login_success) {
+                    cout << endl << endl;
+                    cout << "     Invalid account! Please try again.";
+                    cout << endl << endl;
+                    pause();
+                }
+                break;
+            case GUESS_LOGIN:
+                login_success = true;
+                break;
+        }
     }
 
-    if (login_success) {
-        loadingScreen();
-        menuScreen();
-        paymentScreen();
-    } else {
-        return main();
-    }
+    loadingScreen();
+    menuScreen();
+    paymentScreen();
 
     return 0;
 }
@@ -194,10 +194,7 @@ void paymentScreen() {
 
 bool login()
 {
-    // TODO: I'm not entirely sure what the flow here is?
-
-    string password_input = "";
-    // char c;
+    // TODO: Refactor this to use getpass
 
     cls();
     welcomeScreen();
@@ -207,18 +204,7 @@ bool login()
     cout << "     " << G_ICON[2] << "  Username: ";
     cin >> G_USER;
     cout << "     " << G_ICON[2] << "  Password: ";
-    // c = _getwch();
-
-    // // display * as password
-    // while (c != 13)
-    // {
-    //     pass.push_back(c);
-    //     cout << '*';
-    //     c = _getwch();
-    // }
-    // cout << "\n";
-
-    password_input = "hello";
+    cin >> G_PASS;
 
     ifstream read(G_USER + ".txt");
     getline(read, G_USERTEXT);
