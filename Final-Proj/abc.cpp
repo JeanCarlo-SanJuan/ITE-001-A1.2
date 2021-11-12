@@ -18,7 +18,7 @@ using namespace std;
     void account_registration();
 
 //Global vars
-string user, pass, icon, usertxt, passtxt;
+string G_USER, G_PASS, G_ICON, G_USERTEXT, G_PASSTEXT;
 // predefined valid username and password
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
@@ -65,15 +65,15 @@ int main()
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
 
-    icon[1] = 3;
-    icon[2] = 16;
+    G_ICON[1] = 3;
+    G_ICON[2] = 16;
     bool login_success = false;
     cls();
     welcomeScreen();
 
-    cout << "     [1]  " << icon[2] << "  Register";
-    cout << "\n     [2]  " << icon[2] << "  Login";
-    cout << "\n     [3]  " << icon[2] << "  Guest Login";
+    cout << "     [1]  " << G_ICON[2] << "  Register";
+    cout << "\n     [2]  " << G_ICON[2] << "  Login";
+    cout << "\n     [3]  " << G_ICON[2] << "  Guest Login";
     cout << "\n\n     Your Option: ";
     cin >> option;
 
@@ -136,17 +136,17 @@ void account_registration() {
     welcomeScreen();
 
     cout << "    Type your chosen username and password to register.";
-    cout << "\n\n     " << icon[2] << "  Select Username: ";
-    cin >> user;
-    cout << "     " << icon[2] << "  Select Password: ";
-    cin >> pass;
-    cout << "\n     " << icon[1] << "  You're signed up! you may now use your account to login.\n\n";
+    cout << "\n\n     " << G_ICON[2] << "  Select Username: ";
+    cin >> G_USER;
+    cout << "     " << G_ICON[2] << "  Select Password: ";
+    cin >> G_PASS;
+    cout << "\n     " << G_ICON[1] << "  You're signed up! you may now use your account to login.\n\n";
     pause();
 
     ofstream file;
-    file.open(user + ".txt");
-    file << user << "\n"
-        << pass;
+    file.open(G_USER + ".txt");
+    file << G_USER << "\n"
+        << G_PASS;
     file.close();
 }
 
@@ -180,34 +180,36 @@ void paymentScreen() {
 
 bool login()
 {
-    string pass = "";
+    string password_input = "";
     char c;
 
     cls();
     welcomeScreen();
 
     cout << "     Enter your username and password.";
-    cout << "\n\n     " << icon[2] << "  Username: ";
-    cin >> user;
-    cout << "     " << icon[2] << "  Password: ";
-    c = _getwch();
+    cout << "\n\n     " << G_ICON[2] << "  Username: ";
+    cin >> G_USER;
+    cout << "     " << G_ICON[2] << "  Password: ";
+    // c = _getwch();
 
-    // display * as password
-    while (c != 13)
-    {
-        pass.push_back(c);
-        cout << '*';
-        c = _getwch();
-    }
-    cout << "\n";
+    // // display * as password
+    // while (c != 13)
+    // {
+    //     pass.push_back(c);
+    //     cout << '*';
+    //     c = _getwch();
+    // }
+    // cout << "\n";
 
-    ifstream read(user + ".txt");
-    getline(read, usertxt);
-    getline(read, passtxt);
+    password_input = "hello";
+
+    ifstream read(G_USER + ".txt");
+    getline(read, G_USERTEXT);
+    getline(read, G_USERTEXT);
 
     for (i = 0; i < 4; i++)
     {
-        if ((user == username[i] && pass == password[i]) || (usertxt == user && passtxt == pass))
+        if ((G_USER == username[i] && G_PASS == password[i]) || (G_USERTEXT == G_USER && G_PASSTEXT == G_PASS))
         {
             return true;
         }
