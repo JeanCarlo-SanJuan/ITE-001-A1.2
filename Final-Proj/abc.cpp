@@ -29,15 +29,18 @@ using namespace std;
 time_t current_time;
 const int CAT = 2;
 const int MAX_ITEM_ID = 5;
+const int MAX_CATEGORY = 7;
 int i, j, k, action, category, item;
 string user, pass, icon, usertxt, passtxt;
 
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
+
 string G_categories[]{
     "Bread",
     "Pastries",
     "View Cart",
+    "Remove item\\s from cart",
     "Checkout",
     "Reset Cart",
     "Exit Program"};
@@ -201,7 +204,7 @@ void menuScreen()
     cls();
     cout << "\n             \xB2\xB2~~~~~~~~~~~~~~~~~~~  Menu  ~~~~~~~~~~~~~~~~~~~\xB2\xB2\n";
 
-    for (i = 0; i < 6; i++)
+    for (i = 0; i < MAX_CATEGORY; i++)
     {
         printItem(i, G_categories[i]);
     }
@@ -236,14 +239,17 @@ void menuScreen()
             showCart();
             break;
         case 4:
+            // todo: Remove item logic;
+            break;
+        case 5:
             //Checkout
             showCart();
             break;
-        case 5:
+        case 6:
             resetCart();
             //Reset cart
             break;
-        case 6:
+        case 7:
             cout << "Please come again!\n";
             return;
             //end program
