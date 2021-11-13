@@ -47,23 +47,38 @@ const int W = 40;
 
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
-char icon[2] = {3, 16};
+char icon[2] = {
+    3, 16
+};
 
 char ARROW[5] = "  ";
 
 string G_categories[]{
-    "Bread",    "Pastries",   "View Cart",   "Remove item\\s from cart",
-    "Checkout", "Reset Cart", "Exit Program"};
+    "Bread",
+    "Pastries",
+    "View Cart",
+    "Remove item\\s from cart",
+    "Checkout",
+    "Reset Cart",
+    "Exit Program"
+};
 
-string G_names[CAT][5] = {{
-                              "Pandesal",
-                              "Wheat Loaf Bread",
-                              "Spanish Bread",
-                              "Ensaymada",
-                              "Cheese Bread",
-                          },
-                          {"Peanut Butter Cupcake", "Mocha Cake", "Cheese Cake",
-                           "Apple Cake", "Brownies"}};
+string G_names[CAT][5] = {
+    {
+        "Pandesal",
+        "Wheat Loaf Bread",
+        "Spanish Bread",
+        "Ensaymada",
+        "Cheese Bread",
+    },
+    {
+        "Peanut Butter Cupcake",
+        "Mocha Cake",
+        "Cheese Cake",
+        "Apple Cake",
+        "Brownies"
+    }
+};
 
 // G_data[i][j][k]
 // determines...
@@ -71,20 +86,24 @@ string G_names[CAT][5] = {{
 // j - item
 // k - price, stock, slices, quantity in cart
 float G_data[CAT][MAX_ITEM_ID][4] = {
-    {// Bread
-     //{price per slice, stock in slices, slices per whole (1 means 1 whole ),
-     //quantity in cart by slices}
-     {5, 50, 1},   // Pandesal
-     {11, 45, 10}, // Wheat Loaf
-     {6, 80, 1},
-     {12, 40, 1},
-     {15, 30, 1}},
-    {             // Pastries
-     {18, 33, 1}, // Peanut Butter Cupcake
-     {35, 43, 6}, // Mocha cake
-     {33, 29, 6},
-     {30, 18, 6},
-     {20, 20, 1}}};
+    {
+        // Bread
+        //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
+        {5, 50, 1},  // Pandesal
+        {11, 45, 10}, // Wheat Loaf
+        {6, 80, 1},
+        {12, 40, 1},
+        {15, 30, 1}
+    },
+    {
+        // Pastries
+        {18, 33, 1}, // Peanut Butter Cupcake
+        {35, 43, 6},  // Mocha cake
+        {33, 29, 6},
+        {30, 18, 6},
+        {20, 20, 1}
+    }
+};
 
 int main() {
     ARROW[2] = 16;
