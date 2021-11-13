@@ -262,8 +262,8 @@ void randomizeStocks() {
         for (item = 0; item < MAX_ITEM_ID; item++) {
             stocks = &G_data[category][item][1];
             *stocks += current_time % 100;
-            *stocks = (int(pow(*stocks, 2)) % 100) +
-                      (current_time % int(G_data[category][item][2])) + 5;
+            *stocks += (int(pow(*stocks, 2)) % 100) +
+                       (current_time % int(G_data[category][item][2])) + 5;
         }
     }
 }
