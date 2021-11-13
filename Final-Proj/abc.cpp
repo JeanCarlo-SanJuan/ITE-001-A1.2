@@ -8,6 +8,7 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
+#include <iomanip>
 using namespace std;
     void cls();
     bool login();
@@ -142,10 +143,7 @@ int main() {
         loadingScreen();
         menuScreen();
     }
-    else
-    {
-        return main();
-    }
+    else return main();
 
     return 0;
 }
@@ -171,16 +169,21 @@ void wait(int ms)
     this_thread::sleep_for(chrono::milliseconds(ms));
 }
 
+
 void welcomeScreen()
 {
-    cout << "\n                          ------"
-         << "  Welcome To  "
+    cout.width(W);
+    cout << "\n\t\t------"
+         << " Welcome To "
          << "------\n";
-    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2";
-    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2                  | Automated Bakery Cashier |                 \xB2\xB2";
-    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
-    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2\n\n\n";
+         
+    cout << "\n\t\xB2\xB2\xB2" << setw(55) << setfill('~') << "\xB2\xB2\xB2";
+    cout << setfill(' ');
+    cout << "\n\t \xB2\xB2" << setw(54) << "\xB2\xB2";
+    cout << "\n\t \xB2\xB2                     | ABC |                        \xB2\xB2";
+    cout << "\n\t \xB2\xB2" << setw(54) << "\xB2\xB2";
+    cout << "\n\t\xB2\xB2\xB2" << setw(55) << setfill('~') << "\xB2\xB2\xB2";
+    cout << endl;
 }
 
 void getAction(string msg = "")
@@ -242,24 +245,20 @@ void menuScreen()
         showCart();
         break;
     case 4:
-        // todo: Remove item logic;
         removeItem();
         break;
     case 5:
-        //Todo: Add Checkout logic
         showCart();
         break;
     case 6:
         resetCart();
-        //Reset cart
         break;
     case 7:
         cout << "Please come again!\n";
         return;
-        //end program
     }
 
-    
+
     menuScreen();
  }
 
@@ -357,7 +356,7 @@ void selectItem() {
 
         item = action - 1;
 
-        if (item < MAX_ITEM_ID) {
+        if (item > -1 && item < MAX_ITEM_ID) {
             repeat = askQuantity();
         }
 
@@ -382,7 +381,7 @@ bool askQuantity() {
     cout << "\n\t\t";
     if (hasSlices())
     {
-        cout << "How many slices of " + item_name + " would you like to buy ( " << slices << " slices in 1 whole): ";
+        cout << "How many slices of " + item_name + " would you like to buy? ( " << slices << " slices in 1 whole): ";
     }
     else
     {
