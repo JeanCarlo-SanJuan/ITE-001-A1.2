@@ -12,31 +12,27 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
-#include <iomanip>
 using namespace std;
     void cls();
-    void pause();
-
     bool login();
+    void pause();
     void menuScreen();
     void loadingScreen();
     void welcomeScreen();
     void randomizeStocks();
     void getAction(string);
     void accountRegistration();
+    void printItem(int, string);
     bool askQuantity();
-
-    float showCart();
-    void resetCart();
-    void checkOut();
-
-    void showCategory(string);
-    void showItem(int, string);
-    void showItemInfo(int);
-    void showItemsInCategory();
     bool hasSlices();
-    void selectItem();
+    void showItemInfo(int);
+    float showCart();
+    void checkOut();
+    void resetCart();
     void removeItem();
+    void showCategory(string);
+    void showItemsInCategory();
+    void selectItem();
 
 //Globals
 time_t current_time;
@@ -116,16 +112,14 @@ int main() {
     bool login_success = false;
 
     string login_words[] = {
-        "Register",
-        "Login",
-        "Guest Login"
+        "Register","Login","Guest Login"
     };
 
     cls();
     welcomeScreen();
 
     for (i = 0; i < 3; i++) {
-        showItem(i, login_words[i]);
+        printItem(i, login_words[i]);
     }
 
     getAction("Your Action: ");
@@ -153,7 +147,10 @@ int main() {
         loadingScreen();
         menuScreen();
     }
-    else return main();
+    else
+    {
+        return main();
+    }
 
     return 0;
 }
@@ -179,21 +176,16 @@ void wait(int ms)
   this_thread::sleep_for(chrono::milliseconds(ms));
 }
 
-
 void welcomeScreen()
 {
-    cout.width(W);
-    cout << "\n\t\t\t------"
-         << " Welcome To "
+    cout << "\n                          ------"
+         << "  Welcome To  "
          << "------\n";
-         
-    cout << "\n\t\xB2\xB2\xB2" << setw(50) << setfill('~') << "\xB2\xB2\xB2";
-    cout << setfill(' ');
-    cout << "\n\t \xB2\xB2" << setw(49) << "\xB2\xB2";
-    cout << "\n\t \xB2\xB2                     | ABC |                   \xB2\xB2";
-    cout << "\n\t \xB2\xB2" << setw(49) << "\xB2\xB2";
-    cout << "\n\t\xB2\xB2\xB2" << setw(50) << setfill('~') << "\xB2\xB2\xB2";
-    cout << endl;
+    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2";
+    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
+    cout << "\n     \xB2\xB2                  | Automated Bakery Cashier |                 \xB2\xB2";
+    cout << "\n     \xB2\xB2                                                               \xB2\xB2";
+    cout << "\n     \xB2\xB2\xB2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\xB2\xB2\xB2\n\n\n";
 }
 
 void getAction(string msg = "")
@@ -223,7 +215,7 @@ void accountRegistration()
     file.close();
 }
 
-void showItem(int index, string item)
+void printItem(int index, string item)
 {
     cout << "\t\t[" << index + 1 << "]" << ARROW << item << endl;
 }
@@ -239,7 +231,7 @@ void menuScreen()
 
     for (i = 0; i < MAX_CATEGORY; i++)
     {
-        showItem(i, G_categories[i]);
+        printItem(i, G_categories[i]);
     }
 
     getAction("What would you like to buy / do? ");
@@ -256,6 +248,7 @@ void menuScreen()
         pause();
         break;
     case 4:
+        // todo: Remove item logic;
         removeItem();
         break;
     case 5:
@@ -264,12 +257,15 @@ void menuScreen()
         break;
     case 6:
         resetCart();
+        //Reset cart
         break;
     case 7:
         cout << "Please come again!\n";
         return;
+        //end program
     }
 
+    
     menuScreen();
  }
 
@@ -307,8 +303,7 @@ bool login()
 
     for (i = 0; i < 4; i++)
     {
-        if ( (user == username[i] && pass == password[i]) || 
-             (usertxt == user && passtxt == pass))
+        if ((user == username[i] && pass == password[i]) || (usertxt == user && passtxt == pass))
         {
             return true;
         }
@@ -348,7 +343,7 @@ void showItemsInCategory() {
 }
 
 void showItemInfo(int i) {
-    showItem(i, G_names[category][i]);
+    printItem(i, G_names[category][i]);
     cout << "\t\t\t" << ARROW << "Php " << G_data[category][i][0]
     << "\n\t\t\t" <<ARROW << "Stock: " << G_data[category][i][1] << endl;
 }
@@ -368,7 +363,7 @@ void selectItem() {
 
         item = action - 1;
 
-        if (item > -1 && item < MAX_ITEM_ID) {
+        if (item < MAX_ITEM_ID) {
             repeat = askQuantity();
         }
 
@@ -393,7 +388,7 @@ bool askQuantity() {
     cout << "\n\t\t";
     if (hasSlices())
     {
-        cout << "How many slices of " + item_name + " would you like to buy? ( " << slices << " slices in 1 whole): ";
+        cout << "How many slices of " + item_name + " would you like to buy (" << slices << " slices in 1 whole): ";
     }
     else
     {
@@ -473,7 +468,9 @@ void removeItem() {
         //Show the current cart after removing items
         showCart();
     }
-    else inputError();
+    else{
+        inputError();
+    }
 }
 
 float showCart()
