@@ -62,7 +62,8 @@ string G_categories[]{
     "Remove item\\s from cart",
     "Checkout",
     "Reset Cart",
-    "Exit Program"};
+    "Exit Program"
+};
 
 string G_names[CAT][5] = {
     {
@@ -317,8 +318,8 @@ bool login()
 
 void loadingScreen()
 {
-        // Uncomment later
-    /* cout << "\n\n\t\t\tLoading ";
+    // Todo: Uncomment later
+    /* cout << "\n\n\t\tLoading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
