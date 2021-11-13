@@ -14,6 +14,7 @@ using namespace std;
 
 void cls();
 void pause();
+void wait();
 
 bool login();
 void menuScreen();
@@ -51,8 +52,7 @@ char icon[2] = {
     3, 16
 };
 
-char ARROW[5] = "  ";
-
+string ARROW = "  >  ";
 string G_categories[]{
     "Bread",
     "Pastries",
@@ -106,9 +106,6 @@ float G_data[CAT][MAX_ITEM_ID][4] = {
 };
 
 int main() {
-    ARROW[2] = 16;
-    ARROW[3] = ' ';
-    ARROW[4] = ' ';
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
