@@ -192,6 +192,10 @@ void print_item(int nth, string item)
     cout << nth + 1 << ". " << item << endl;
 }
 
+void i_error() {
+    cout << "Invalid input!\n";
+    pause();
+}
 void menuScreen()
 {
     cls();
@@ -218,7 +222,12 @@ void menuScreen()
 
         getAction("\nSelect item: ");
         item = action - 1;
-        askQuantity();
+
+        if (item < MAX_PRODUCT_ID) {
+            askQuantity();
+        } else {
+            i_error();
+        }
     } else {
         switch (action)
         {
@@ -235,6 +244,8 @@ void menuScreen()
             //Reset cart
             break;
         case 6:
+            cout << "Please come again!\n";
+            return;
             //end program
             break;
         }
@@ -282,6 +293,7 @@ void randomizeStocks()
         cout << "\n\n     " << icon[2] << "  Username: ";
         cin >> user;
         cout << "     " << icon[2] << "  Password: ";
+        cin >> pass;
 
         ifstream read(user + ".txt");
         getline(read, usertxt);
@@ -297,10 +309,10 @@ void randomizeStocks()
         return false;
     }
 
-    void loadingScreen()
-    {
+void loadingScreen()
+{
         // Uncomment later
-        /* cout << "\n\n             Loading ";
+    cout << "\n\n             Loading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -312,8 +324,8 @@ void randomizeStocks()
             wait(90);
         if (i >= 10)
             wait(25);
-    } */
     }
+}
 
 void showItemInfo(int i) {
     cout << i + 1 << ". " << G_names[category][i]
@@ -359,13 +371,13 @@ void askQuantity() {
             return;
         }
         cout << "Not enough stock!\n";
+        pause();
     }
     else
     {
-        cout << "Invalid input!\n";
+        i_error();
     }
 
-    pause();
     return askQuantity();
 }
 
