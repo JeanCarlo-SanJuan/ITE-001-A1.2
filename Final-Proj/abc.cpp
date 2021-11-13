@@ -11,24 +11,27 @@
 #include <iomanip>
 using namespace std;
     void cls();
-    bool login();
     void pause();
+
+    bool login();
     void menuScreen();
     void loadingScreen();
     void welcomeScreen();
     void randomizeStocks();
     void getAction(string);
     void accountRegistration();
-    void printItem(int, string);
     bool askQuantity();
-    bool hasSlices();
-    void showItemInfo(int);
+
     void showCart();
     void resetCart();
-    void removeItem();
+
     void showCategory(string);
+    void showItem(int, string);
+    void showItemInfo(int);
     void showItemsInCategory();
+    bool hasSlices();
     void selectItem();
+    void removeItem();
 
 //Globals
 time_t current_time;
@@ -108,14 +111,16 @@ int main() {
     bool login_success = false;
 
     string login_words[] = {
-        "Register","Login","Guest Login"
+        "Register",
+        "Login",
+        "Guest Login"
     };
 
     cls();
     welcomeScreen();
 
     for (i = 0; i < 3; i++) {
-        printItem(i, login_words[i]);
+        showItem(i, login_words[i]);
     }
 
     getAction("Your Action: ");
@@ -213,7 +218,7 @@ void accountRegistration()
     file.close();
 }
 
-void printItem(int index, string item)
+void showItem(int index, string item)
 {
     cout << "\t\t[" << index + 1 << "]" << ARROW << item << endl;
 }
@@ -229,7 +234,7 @@ void menuScreen()
 
     for (i = 0; i < MAX_CATEGORY; i++)
     {
-        printItem(i, G_categories[i]);
+        showItem(i, G_categories[i]);
     }
 
     getAction("What would you like to buy / do? ");
@@ -257,7 +262,6 @@ void menuScreen()
         cout << "Please come again!\n";
         return;
     }
-
 
     menuScreen();
  }
@@ -297,7 +301,8 @@ bool login()
 
     for (i = 0; i < 4; i++)
     {
-        if ((user == username[i] && pass == password[i]) || (usertxt == user && passtxt == pass))
+        if ( (user == username[i] && pass == password[i]) || 
+             (usertxt == user && passtxt == pass))
         {
             return true;
         }
@@ -336,7 +341,7 @@ void showItemsInCategory() {
 }
 
 void showItemInfo(int i) {
-    printItem(i, G_names[category][i]);
+    showItem(i, G_names[category][i]);
     cout << "\t\t\t" << ARROW << "Php " << G_data[category][i][0]
     << "\n\t\t\t" <<ARROW << "Stock: " << G_data[category][i][1] << endl;
 }
@@ -461,12 +466,8 @@ void removeItem() {
         //Show the current cart after removing items
         showCart();
     }
-    else{
-        inputError();
-    }
+    else inputError();
 }
-        /*   cout << "Receipt:" << endl;
-    cout << "--------------------------------------------------" << endl; */
 void showCart()
 {      
     i = 0; // Counter for all the items regardless of the category
@@ -483,7 +484,7 @@ void showCart()
             if (in_cart > 0)
             {
                 isEmpty = false;
-                printItem(i, G_names[category][item] + " x " + to_string(in_cart));
+                showItem(i, G_names[category][item] + " x " + to_string(in_cart));
             }
         }
     }
