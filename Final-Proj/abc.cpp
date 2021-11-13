@@ -28,7 +28,7 @@ using namespace std;
 //Globals
 time_t current_time;
 const int CAT = 2;
-const int MAX_PRODUCT_ID = 5;
+const int MAX_ITEM_ID = 5;
 int i, j, k, action, category, item;
 string user, pass, icon, usertxt, passtxt;
 
@@ -62,9 +62,9 @@ string G_names[CAT][5] = {
 // G_data[i][j][k]
 // determines...
 // i - category
-// j - product
+// j - item
 // k - price, stock, slices, quantity in cart
-float G_data[CAT][MAX_PRODUCT_ID][4] = {
+float G_data[CAT][MAX_ITEM_ID][4] = {
     {
         // Bread
         //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
@@ -211,11 +211,11 @@ void menuScreen()
     if (action >= 1 && action <= 2)
     {
         cout << G_categories[category] << ":"
-            << "\nProduct >> Price >> Stock available\n";
+            << "\nitem >> Price >> Stock available\n";
 
         category = action - 1;
 
-        for (i = 0; i < MAX_PRODUCT_ID; i++)
+        for (i = 0; i < MAX_ITEM_ID; i++)
         {
             showItemInfo(i);
         }
@@ -223,7 +223,7 @@ void menuScreen()
         getAction("\nSelect item: ");
         item = action - 1;
 
-        if (item < MAX_PRODUCT_ID) {
+        if (item < MAX_ITEM_ID) {
             askQuantity();
         } else {
             inputError();
@@ -273,7 +273,7 @@ void randomizeStocks()
     float *stocks;
     for (category = 0; i < CAT; i++)
     {
-        for (item = 0; j < MAX_PRODUCT_ID; j++)
+        for (item = 0; j < MAX_ITEM_ID; j++)
         {
             stocks = &G_data[category][item][1];
             *stocks += current_time % 100;
@@ -387,29 +387,32 @@ bool hasSlices()
 }
 
 void resetCart() {
-    for (int category_id = 0; category_id < CAT; category_id++)
+    for (category = 0; category < CAT; category++)
     {
-        for (int product_id = 0; product_id < MAX_PRODUCT_ID; product_id++) {
-            G_data[category_id][product_id][3] = 0;
+        for (item = 0; item < MAX_ITEM_ID; item++) {
+            G_data[category][item][3] = 0;
         }
-
     }
+
+    cout << "Cart has been resetted!\n";
+    pause();
 }
 
 void showCart()
 {
+    // Todo: add note when cart is empty;
     /*   cout << "Receipt:" << endl;
 cout << "--------------------------------------------------" << endl; */
-
-    for (int category_id = 0; category_id < CAT; category_id++)
+    int in_cart;
+    for (category = 0; category < CAT; category++)
     {
-        for (int product_id = 0; product_id < MAX_PRODUCT_ID; product_id++)
+        for (item = 0;item < MAX_ITEM_ID;item++)
         {
-            int in_cart = G_data[category_id][product_id][3];
+            in_cart = G_data[category][item][3];
 
             if (in_cart > 0)
             {
-                cout << G_names[category][product_id] << " x "
+                cout << G_names[category][item] << " x "
                         << in_cart << endl;
             }
         }
