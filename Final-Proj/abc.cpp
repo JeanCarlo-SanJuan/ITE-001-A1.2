@@ -447,7 +447,7 @@ void removeItem() {
     //Show cart first
     showCart();
     getAction("Which item would you like to remove? ");
-    //after identifying what item to remove, ask how many of that item to remove?
+    //after identifying what item to remove, ask how many of that item to remove
 
     i = 0; // as a counter
     for (category = 0; category < CAT; category++)
@@ -469,7 +469,6 @@ void removeItem() {
         removeItem();
     }
     else if (removeYN == 'N' || removeYN == 'n'){
-        //Show the current cart after removing items
         showCart();
     }
     else inputError();
@@ -579,15 +578,14 @@ void checkOut() {
     }
 
     switch (payment_method) {
-    case 1:
-      cout << "        Please pay Php: "
-           << fixed
-           << setprecision(2)
-           << subtotal
-           << " in cash.";
-      break;
-    }
-
+        case 1:
+        cout << "        Please pay Php: "
+            << fixed
+            << setprecision(2)
+            << subtotal
+            << " in cash.";
+        break;
+        }
   }
   pause();
 }
