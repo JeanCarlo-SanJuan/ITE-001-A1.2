@@ -18,7 +18,7 @@ using namespace std;
     void randomizeStocks();
     void getAction(string);
     void accountRegistration();
-    void print_item(int, string);
+    void printItem(int, string);
     void askQuantity();
     bool hasSlices();
     void showItemInfo(int);
@@ -187,12 +187,12 @@ void accountRegistration()
     file.close();
 }
 
-void print_item(int nth, string item)
+void printItem(int nth, string item)
 {
     cout << nth + 1 << ". " << item << endl;
 }
 
-void i_error() {
+void inputError() {
     cout << "Invalid input!\n";
     pause();
 }
@@ -203,7 +203,7 @@ void menuScreen()
 
     for (i = 0; i < 6; i++)
     {
-        print_item(i, G_categories[i]);
+        printItem(i, G_categories[i]);
     }
 
     getAction("\nWhat would you like to buy / do? ");
@@ -226,7 +226,7 @@ void menuScreen()
         if (item < MAX_PRODUCT_ID) {
             askQuantity();
         } else {
-            i_error();
+            inputError();
         }
     } else {
         switch (action)
@@ -375,7 +375,7 @@ void askQuantity() {
     }
     else
     {
-        i_error();
+        inputError();
     }
 
     return askQuantity();
