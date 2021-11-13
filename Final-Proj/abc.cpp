@@ -1,4 +1,8 @@
 #include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
+#include <string>
 #include <fstream>
 #include <string>
 #include <cstdlib>
@@ -22,7 +26,8 @@ using namespace std;
     bool askQuantity();
     bool hasSlices();
     void showItemInfo(int);
-    void showCart();
+    float showCart();
+    void checkOut();
     void resetCart();
     void removeItem();
     void showCategory(string);
@@ -163,12 +168,12 @@ void pause()
 
 void showCategory(string cat) {
     cout.width(W);
-    cout << "\n\t\xB2\xB2~~~~~~~~~~~~~~~~~~~  " << cat << " ~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n";
+    cout << "\n\t\xB2\xB2~~~~~~~~~~~~~~~~~~~~ " << cat << " ~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n";
 }
 
 void wait(int ms)
 {
-    this_thread::sleep_for(chrono::milliseconds(ms));
+  this_thread::sleep_for(chrono::milliseconds(ms));
 }
 
 void welcomeScreen()
@@ -240,6 +245,7 @@ void menuScreen()
     case 3:
         //View cart
         showCart();
+        pause();
         break;
     case 4:
         // todo: Remove item logic;
@@ -247,7 +253,7 @@ void menuScreen()
         break;
     case 5:
         //Todo: Add Checkout logic
-        showCart();
+        checkOut();
         break;
     case 6:
         resetCart();
@@ -266,15 +272,14 @@ void menuScreen()
 // Items related
 void randomizeStocks()
 {
-    int i, j;
     float *stocks;
-    for (category = 0; i < CAT; i++)
+    for (category = 0; category < CAT; category++)
     {
-        for (item = 0; j < MAX_ITEM_ID; j++)
+        for (item = 0; item < MAX_ITEM_ID; item++)
         {
             stocks = &G_data[category][item][1];
             *stocks += current_time % 100;
-            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(G_data[i][j][2])) + 5;
+            *stocks = (int(pow(*stocks, 2)) % 100) + (current_time % int(G_data[category][item][2])) + 5;
         }
     }
 }
@@ -315,6 +320,7 @@ void loadingScreen()
     for (int i = 0; i < 35; i++)
     {
         cout << x;
+        cout.flush();
         if (i < 10)
             wait(130);
         if (i >= 10 && i < 20)
@@ -382,7 +388,7 @@ bool askQuantity() {
     cout << "\n\t\t";
     if (hasSlices())
     {
-        cout << "How many slices of " + item_name + " would you like to buy ( " << slices << " slices in 1 whole): ";
+        cout << "How many slices of " + item_name + " would you like to buy (" << slices << " slices in 1 whole): ";
     }
     else
     {
@@ -466,32 +472,120 @@ void removeItem() {
         inputError();
     }
 }
-        /*   cout << "Receipt:" << endl;
-    cout << "--------------------------------------------------" << endl; */
-void showCart()
+
+float showCart()
 {      
-    i = 0; // Counter for all the items regardless of the category
-    int in_cart;
-    bool isEmpty = true;
+  i = 0; // Counter for all the items regardless of the category
+  int in_cart;
+  float subtotal = 0;
+  string item_name, item_price;
+  bool isEmpty = true;
 
-    showCategory("Cart");
-    for (category = 0; category < CAT; category++)
+  showCategory("Cart");
+  for (category = 0; category < CAT; category++)
     {
-        for (item = 0;item < MAX_ITEM_ID;item++)
+      for (item = 0; item < MAX_ITEM_ID; item++)
         {
-            in_cart = G_data[category][item][3];
+          // ostringstream is similar to cout, but it doesn't print anything
+          // to the screen.
+          ostringstream item_price_tmp;
 
-            if (in_cart > 0)
+          in_cart = G_data[category][item][3];
+          item_name = G_names[category][item];
+          subtotal += G_data[category][item][0] * in_cart;
+
+          // "Print" the price of the item.
+          item_price_tmp << "Php "
+                         << fixed
+                         << setprecision(2)
+                         << G_data[category][item][0] * in_cart;
+
+          // Then convert that into a proper string.
+          item_price = item_price_tmp.str();
+
+          // sjp: C++ has very weak type inference and having this
+          // iterator type is required :/
+          //
+          // What this snippet does is remove spaces from a string.
+          // Reference: https://stackoverflow.com/questions/83439/remove-spaces-from-stdstring-in-c
+          string::iterator end_pos = remove(item_name.begin(), item_name.end(), ' ');
+          item_name.erase(end_pos, item_name.end());
+
+          if (in_cart > 0)
             {
-                isEmpty = false;
-                printItem(i, G_names[category][item] + " x " + to_string(in_cart));
+              string lhs = to_string(in_cart) + "x" + item_name;
+              cout << "        "
+                   << lhs
+                   << setw(45 - lhs.length())
+                   << right
+                   << item_price
+                   << endl;
+              isEmpty = false;
             }
         }
     }
 
-    if (isEmpty) {
-        cout << "\t\tThe cart is empty!\n";
+  if (isEmpty) {
+    cout << "\t\tThe cart is empty!\n";
+  } else {
+    cout << "        "
+         << "---------------------------------------------"
+         << endl;
+
+    ostringstream subtotal_tmp;
+
+    subtotal_tmp << "Php "
+                 << fixed
+                 << setprecision(2)
+                 << subtotal;
+
+    string subtotal_str = subtotal_tmp.str();
+
+    cout << "        Subtotal"
+         << setw(37)
+         << right
+         << subtotal_str;
+  }
+
+  return subtotal;
+}
+
+void checkOut() {
+  float subtotal = showCart();
+  if (subtotal > 0) {
+    int payment_method;
+    bool valid_method = false;
+    while (!valid_method) {
+      cout << endl << endl;
+      showCategory("Checkout");
+
+      cout << "        Please enter mode of payment:"
+           << endl
+           << "        [1] Cash"
+           << endl
+           << endl
+           << "        > ";
+      cin >> payment_method;
+      cout << endl;
+
+      if (payment_method == 1) {
+        valid_method = true;
+      } else {
+        cls();
+        showCart();
+      }
     }
 
-    pause();
+    switch (payment_method) {
+    case 1:
+      cout << "        Please pay Php: "
+           << fixed
+           << setprecision(2)
+           << subtotal
+           << " in cash.";
+      break;
+    }
+
+  }
+  pause();
 }
