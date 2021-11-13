@@ -187,12 +187,13 @@ void welcomeScreen()
          << " Welcome To "
          << "------\n";
          
-    cout << "\n\t\xB2\xB2\xB2" << setw(50) << setfill('~') << "\xB2\xB2\xB2";
+    cout << "\n\t\xB2\xB2\xB2" << setw(55) << setfill('~') << "\xB2\xB2\xB2";
     cout << setfill(' ');
-    cout << "\n\t \xB2\xB2" << setw(49) << "\xB2\xB2";
-    cout << "\n\t \xB2\xB2                     | ABC |                   \xB2\xB2";
-    cout << "\n\t \xB2\xB2" << setw(49) << "\xB2\xB2";
-    cout << "\n\t\xB2\xB2\xB2" << setw(50) << setfill('~') << "\xB2\xB2\xB2";
+    cout << "\n\t \xB2\xB2" << setw(54) << "\xB2\xB2";
+    cout << "\n\t \xB2\xB2                     | ABC |                        \xB2\xB2";
+    cout << "\n\t \xB2\xB2" << setw(54) << "\xB2\xB2";
+    cout << "\n\t\xB2\xB2\xB2" << setw(55) << setfill('~') << "\xB2\xB2\xB2";
+    cout << setfill(' ');
     cout << endl;
 }
 
@@ -251,7 +252,6 @@ void menuScreen()
         selectItem();
         break;
     case 3:
-        //View cart
         showCart();
         pause();
         break;
@@ -259,7 +259,6 @@ void menuScreen()
         removeItem();
         break;
     case 5:
-        //Todo: Add Checkout logic
         checkOut();
         break;
     case 6:
@@ -516,7 +515,7 @@ float showCart()
 
           if (in_cart > 0)
             {
-              string lhs = to_string(in_cart) + "x" + item_name;
+              string lhs = to_string(in_cart) + " x " + item_name;
               cout << "        "
                    << lhs
                    << setw(45 - lhs.length())
@@ -544,7 +543,7 @@ float showCart()
 
     string subtotal_str = subtotal_tmp.str();
 
-    cout << "        Subtotal"
+    cout << "\t\tSubtotal"
          << setw(37)
          << right
          << subtotal_str;
