@@ -551,11 +551,10 @@ float showCart()
 }
 
 void checkOut() {
+  int payment_method;
   float subtotal = showCart();
   if (subtotal > 0) {
-    int payment_method;
-    bool valid_method = false;
-    while (!valid_method) {
+    while (true) {
       cout << endl << endl;
       showCategory("Checkout");
 
@@ -569,23 +568,42 @@ void checkOut() {
       cout << endl;
 
       if (payment_method == 1) {
-        valid_method = true;
+        break;
       } else {
         cls();
         showCart();
       }
     }
+  }
 
-    switch (payment_method) {
-    case 1:
+  switch (payment_method) {
+  case 1:
+    while (true) {
       cout << "        Please pay Php: "
            << fixed
            << setprecision(2)
            << subtotal
-           << " in cash.";
-      break;
+           << " in cash." << endl;
+      cout << "        > ";
+      float payment;
+      cin >> payment;
+      if (payment > subtotal) {
+        cout << "        Thank you!"
+             << "Your change is Php: "
+             << fixed
+             << setprecision(2)
+             << (subtotal - payment)
+             << endl;
+        break;
+      } else if (payment == subtotal) {
+        cout << "        Thank you!" << endl;
+        break;
+      } else {
+        cout << endl;
+        cout << "        Invalid Payment!" << endl;
+      }
     }
-
+    break;
   }
   pause();
 }
