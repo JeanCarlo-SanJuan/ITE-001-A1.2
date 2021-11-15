@@ -412,15 +412,23 @@ void removeItem() {
     getAction("Which item would you like to remove? ");
     // after identifying what item to remove, ask how many of that item to
     // remove
-
+    int target = action - 1;
+    bool done = false;
     i = 0; // as a counter
     for (category = 0; category < CAT; category++) {
-        for (item = 0; item < MAX_ITEM_ID; item++) {
-            if (i == (action - 1)) {
-                G_data[category][item][3] = 0;
-            }
 
-            i++;
+        if (done) break;
+        
+        for (item = 0; item < MAX_ITEM_ID; item++) {
+            if (G_data[category][item][3] > 0) {
+                if (i == (target)) {
+                    G_data[category][item][3] = 0;
+                    done = true;
+                    break;
+                } else {
+                    i++;    
+                }
+            }
         }
     }
     // ask if user wants to remove some more
