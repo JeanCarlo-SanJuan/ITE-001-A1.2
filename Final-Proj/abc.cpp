@@ -294,7 +294,7 @@ bool login() {
 
 void loadingScreen() {
     // Todo: Uncomment later
-    /* cout << "\n\n\t\tLoading ";
+    cout << "\n\n\t\tLoading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -307,7 +307,7 @@ void loadingScreen() {
             wait(90);
         if (i >= 10)
             wait(25);
-    } */
+    }
 }
 
 void showItemsInCategory() {
@@ -424,7 +424,7 @@ void removeItem() {
         }
     }
     // ask if user wants to remove some more
-    cout << "Would you like to remove other items?: (Y/N) ";
+    cout << "\t\tWould you like to remove other items?: (Y/N) ";
     cin >> removeYN;
     if (removeYN == 'Y' || removeYN == 'y') {
         removeItem();
