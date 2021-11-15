@@ -41,7 +41,7 @@ void removeItem();
 time_t current_time;
 const int CAT = 2;
 const int MAX_ITEM_ID = 5;
-const int MAX_CATEGORY = 7;
+const int MAX_CATEGORY = 8;
 int i, j, k, action, category, item;
 string user, pass, usertxt, passtxt;
 const int W = 40;
@@ -60,6 +60,7 @@ string G_categories[]{
     "Remove item\\s from cart",
     "Checkout",
     "Reset Cart",
+    "Log Out",
     "Exit Program"
 };
 
@@ -247,6 +248,9 @@ void menuScreen() {
         pause();
         break;
     case 7:
+         main();
+         break;
+    case 8:
         cout << "Please come again!\n";
         return;
     }
