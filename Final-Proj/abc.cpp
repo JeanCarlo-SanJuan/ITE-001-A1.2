@@ -542,11 +542,13 @@ void checkOut() {
             cin >> payment;
             if (payment > subtotal) {
                 cout << "        Thank you!"
-                     << "Your change is Php: " << fixed << setprecision(2)
-                     << (subtotal - payment) << endl;
+                     << " Your change is Php: " << fixed << setprecision(2)
+                     << (payment - subtotal) << endl;
+                     resetCart();
                 break;
             } else if (payment == subtotal) {
                 cout << "        Thank you!" << endl;
+                resetCart();
                 break;
             } else {
                 cout << endl;
