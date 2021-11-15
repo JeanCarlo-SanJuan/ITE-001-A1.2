@@ -240,9 +240,11 @@ void menuScreen() {
         break;
     case 5:
         checkOut();
+        resetCart();
         break;
     case 6:
         resetCart();
+        pause();
         break;
     case 7:
         cout << "Please come again!\n";
@@ -309,9 +311,8 @@ void loadingScreen() {
 }
 
 void showItemsInCategory() {
-    showCategory(G_categories[category]);
-
     category = action - 1;
+    showCategory(G_categories[category]);
 
     for (i = 0; i < MAX_ITEM_ID; i++) {
         showItemInfo(i);
@@ -401,8 +402,7 @@ void resetCart() {
         }
     }
 
-    cout << "Cart has been resetted!\n";
-    pause();
+    cout << "\t\tCart has been resetted!\n";
 }
 
 void removeItem() {
