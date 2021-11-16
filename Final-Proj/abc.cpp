@@ -113,7 +113,7 @@ int main() {
     const int QUIT = 4;
     bool login_success = false;
 
-    string login_words[] = {"Register", "Login", "Guest Login",};// "Quit"};
+    string login_words[] = {"Register", "Login", "Guest Login", "Quit"};
 
     while (true) {
         cls();
@@ -139,10 +139,10 @@ int main() {
             case GUESS_LOGIN:
                 login_success = true;
                 break;
-            /* case QUIT:
+            case QUIT:
                 endMsg();
                 return 0;
-                break; */
+                break;
         }
 
         if (login_success) {
