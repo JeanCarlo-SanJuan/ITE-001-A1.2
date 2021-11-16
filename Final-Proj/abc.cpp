@@ -318,7 +318,7 @@ bool login() {
 
 void loadingScreen() {
     // Todo: Uncomment later
-    cout << "\n\n\t\tLoading ";
+    /* cout << "\n\n\t\tLoading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -331,7 +331,7 @@ void loadingScreen() {
             wait(90);
         if (i >= 10)
             wait(25);
-    }
+    } */
 }
 
 void showItemsInCategory() {
@@ -430,40 +430,43 @@ void resetCart() {
 }
 
 void removeItem() {
-    char removeYN;
     // Show cart first
-    showCart();
-    getAction("Which item would you like to remove? ");
-    // after identifying what item to remove, ask how many of that item to
-    // remove
-    int target = action - 1;
-    bool done = false;
-    i = 0; // as a counter
-    for (category = 0; category < CAT; category++) {
+    if (showCart == 0) {
+        pause();
+    } else {
+        char removeYN;
+        getAction("Which item would you like to remove? ");
+        // after identifying what item to remove, ask how many of that item to
+        // remove
+        int target = action - 1;
+        bool done = false;
+        i = 0; // as a counter
+        for (category = 0; category < CAT; category++) {
 
-        if (done) break;
-        
-        for (item = 0; item < MAX_ITEM_ID; item++) {
-            if (G_data[category][item][3] > 0) {
-                if (i == (target)) {
-                    G_data[category][item][3] = 0;
-                    done = true;
-                    break;
-                } else {
-                    i++;    
+            if (done) break;
+            
+            for (item = 0; item < MAX_ITEM_ID; item++) {
+                if (G_data[category][item][3] > 0) {
+                    if (i == (target)) {
+                        G_data[category][item][3] = 0;
+                        done = true;
+                        break;
+                    } else {
+                        i++;    
+                    }
                 }
             }
         }
+        // ask if user wants to remove some more
+        cout << "\t\tWould you like to remove other items?: (Y/N) ";
+        cin >> removeYN;
+        if (removeYN == 'Y' || removeYN == 'y') {
+            removeItem();
+        } else if (removeYN == 'N' || removeYN == 'n') {
+            showCart();
+        } else
+            inputError();
     }
-    // ask if user wants to remove some more
-    cout << "\t\tWould you like to remove other items?: (Y/N) ";
-    cin >> removeYN;
-    if (removeYN == 'Y' || removeYN == 'y') {
-        removeItem();
-    } else if (removeYN == 'N' || removeYN == 'n') {
-        showCart();
-    } else
-        inputError();
 }
 
 float showCart() {
@@ -536,10 +539,10 @@ void checkOut() {
             cout << endl << endl;
             showCategory("Checkout");
 
-            cout << "        Please enter mode of payment:" << endl
-                 << "        [1] Cash" << endl
+            cout << "\t\tPlease enter mode of payment:" << endl
+                 << "\t\t[1] Cash" << endl
                  << endl
-                 << "        > ";
+                 << "\t\t> ";
             cin >> payment_method;
             cout << endl;
 
@@ -555,21 +558,21 @@ void checkOut() {
     switch (payment_method) {
     case 1:
         while (true) {
-            cout << "        Please pay Php: " << fixed << setprecision(2)
+            cout << "\t\tPlease pay Php: " << fixed << setprecision(2)
                  << subtotal << " in cash." << endl;
-            cout << "        > ";
+            cout << "\t\t> ";
             float payment = ask<float>("");
             if (payment > subtotal) {
-                cout << "        Thank you!"
+                cout << "\t\tThank you!\n"
                      << "Your change is Php: " << fixed << setprecision(2)
                      << (payment - subtotal) << endl;
                 break;
             } else if (payment == subtotal) {
-                cout << "        Thank you!" << endl;
+                cout << "\t\tThank you!" << endl;
                 break;
             } else {
                 cout << endl;
-                cout << "        Invalid Payment!" << endl;
+                cout << "\t\tInvalid Payment!" << endl;
             }
         }
         break;
