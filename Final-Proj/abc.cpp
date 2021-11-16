@@ -107,6 +107,19 @@ float G_data[CAT][MAX_ITEM_ID][4] = {
     }
 };
 
+template <typename T>
+T ask(string msg = "") {
+    T c;
+    do {
+        cout << msg;
+        cin >> c;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore();
+        } else return c;
+    } while (true);
+}
+
 int main() {
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
@@ -115,7 +128,13 @@ int main() {
     const int ADMIN = 5;
     bool login_success = false;
 
-    string login_words[] = {"Register", "Login", "Guest Login", "Quit", "Administrator"};
+    string login_words[] = {
+        "Register", 
+        "Login", 
+        "Guest Login", 
+        "Quit", 
+        "Administrator"
+    };
 
     while (true) {
         cls();
@@ -160,20 +179,9 @@ int main() {
     return 0;
 }
 
-template <typename T>
-T ask(string msg = "") {
-    T c;
-    do {
-        cout << msg;
-        cin >> c;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore();
-        } else return c;
-    } while (true);
-}
-
 void cls() { system("cls||clear"); }
+
+void wait(int ms) { this_thread::sleep_for(chrono::milliseconds(ms)); }
 
 void pause() {
     cout << "\n\t\tPress Enter to continue...";
@@ -185,8 +193,6 @@ void showCategory(string cat) {
     cout << "\n\t\xB2\xB2~~~~~~~~~~~~~~~~~~~~ " << cat
          << " ~~~~~~~~~~~~~~~~~~~\xB2\xB2\n\n";
 }
-
-void wait(int ms) { this_thread::sleep_for(chrono::milliseconds(ms)); }
 
 void welcomeScreen() {
     cout.width(W);
@@ -322,8 +328,7 @@ bool login() {
 }
 
 void loadingScreen() {
-    // Todo: Uncomment later
-    /* cout << "\n\n\t\tLoading ";
+    cout << "\n\n\t\tLoading ";
     char x = 219;
 
     for (int i = 0; i < 35; i++)
@@ -336,7 +341,7 @@ void loadingScreen() {
             wait(90);
         if (i >= 10)
             wait(25);
-    } */
+    }
 }
 
 void showItemsInCategory() {
