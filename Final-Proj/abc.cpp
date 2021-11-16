@@ -430,25 +430,25 @@ void resetCart() {
 }
 
 void removeItem() {
-    // Show cart first
-    if (showCart == 0) {
+    if (showCart() == 0) {
         pause();
     } else {
         char removeYN;
         getAction("Which item would you like to remove? ");
-        // after identifying what item to remove, ask how many of that item to
-        // remove
         int target = action - 1;
         bool done = false;
+        float *in_cart;
         i = 0; // as a counter
         for (category = 0; category < CAT; category++) {
 
             if (done) break;
             
             for (item = 0; item < MAX_ITEM_ID; item++) {
-                if (G_data[category][item][3] > 0) {
+                    in_cart = &G_data[category][item][3];
+                if (*in_cart > 0) {
                     if (i == (target)) {
-                        G_data[category][item][3] = 0;
+                        G_data[category][item][1] += *in_cart;
+                        *in_cart = 0;
                         done = true;
                         break;
                     } else {
@@ -457,15 +457,19 @@ void removeItem() {
                 }
             }
         }
-        // ask if user wants to remove some more
-        cout << "\t\tWould you like to remove other items?: (Y/N) ";
-        cin >> removeYN;
-        if (removeYN == 'Y' || removeYN == 'y') {
-            removeItem();
-        } else if (removeYN == 'N' || removeYN == 'n') {
-            showCart();
-        } else
-            inputError();
+
+        if (showCart() > 0) {
+            // ask if user wants to remove some more
+            cout << "\tWould you like to remove other items?: (Y/N) ";
+            cin >> removeYN;
+            if (removeYN == 'Y' || removeYN == 'y') {
+                cls();
+                removeItem();
+            } else if (removeYN == 'N' || removeYN == 'n') {
+                showCart();
+            } else
+                inputError();
+        } else pause();
     }
 }
 
