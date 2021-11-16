@@ -36,7 +36,6 @@ void showItemsInCategory();
 bool hasSlices();
 void selectItem();
 void removeItem();
-
 void endMsg();
 
 // Globals
@@ -156,6 +155,19 @@ int main() {
     return 0;
 }
 
+template <typename T>
+T ask(string msg = "") {
+    T c;
+    do {
+        cout << msg;
+        cin >> c;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore();
+        } else return c;
+    } while (true);
+}
+
 void cls() { system("cls||clear"); }
 
 void pause() {
@@ -189,8 +201,7 @@ void welcomeScreen() {
 }
 
 void getAction(string msg = "") {
-    cout << "\n\t\t" + msg;
-    cin >> action;
+    action = ask<int>("\n\t\t" + msg);
 }
 
 // Account related
@@ -547,8 +558,7 @@ void checkOut() {
             cout << "        Please pay Php: " << fixed << setprecision(2)
                  << subtotal << " in cash." << endl;
             cout << "        > ";
-            float payment;
-            cin >> payment;
+            float payment = ask<float>("");
             if (payment > subtotal) {
                 cout << "        Thank you!"
                      << "Your change is Php: " << fixed << setprecision(2)
