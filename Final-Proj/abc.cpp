@@ -248,8 +248,9 @@ void menuScreen() {
         pause();
         break;
     case 7:
-         main();
-         break;
+        resetCart();
+        main();
+        break;
     case 8:
         cout << "Please come again!\n";
         return;
