@@ -48,11 +48,9 @@ const int W = 40;
 
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
-char icon[2] = {
-    3, 16
-};
 
-string ARROW = "  >  ";
+const string ARROW = "  >  ";
+
 string G_categories[]{
     "Bread",
     "Pastries",
@@ -110,9 +108,10 @@ int main() {
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
+    const int QUIT = 4;
     bool login_success = false;
 
-    string login_words[] = {"Register", "Login", "Guest Login"};
+    string login_words[] = {"Register", "Login", "Guest Login", "Quit"};
 
     while (true) {
         cls();
@@ -125,19 +124,22 @@ int main() {
         getAction("Your Action: ");
 
         switch (action) {
-        case REGISTRATION:
-            accountRegistration();
-            break;
-        case MEMBER_LOGIN:
-            login_success = login();
-            if (!login_success) {
-                cout << "\n     Invalid account! Please try again.\n\n";
-                pause();
-            }
-            break;
-        case GUESS_LOGIN:
-            login_success = true;
-            break;
+            case REGISTRATION:
+                accountRegistration();
+                break;
+            case MEMBER_LOGIN:
+                login_success = login();
+                if (!login_success) {
+                    cout << "\n\tInvalid account! Please try again.\n\n";
+                    pause();
+                }
+                break;
+            case GUESS_LOGIN:
+                login_success = true;
+                break;
+            case QUIT:
+                return 0;
+                break;
         }
 
         if (login_success) {
@@ -193,13 +195,13 @@ void accountRegistration() {
     cls();
     welcomeScreen();
 
-    cout << "\t\tType your chosen username and password to register.";
-    cout << "\n\n\t" << icon[1] << "  Select Username: ";
+    cout << "\t\tType a username and password to register.\n";
+    cout << "\n\t\t" << ARROW << "Select Username: ";
     cin >> user;
-    cout << "\t" << icon[1] << "  Select Password: ";
+    cout << "\t\t" << ARROW << "Select Password: ";
     cin >> pass;
-    cout << "\n\t" << icon[0]
-         << "  You're signed up! you may now use your account to login.\n\n";
+    cout << "\n\t" << ARROW
+         << "You're now signed up! you may now use your account to login.\n\n";
     pause();
 
     ofstream file;
@@ -278,10 +280,10 @@ bool login() {
     cls();
     welcomeScreen();
 
-    cout << "\tEnter your username and password.";
-    cout << "\n\n\t" << icon[1] << "  Username: ";
+    cout << "\t\tEnter your username and password.";
+    cout << "\n\n\t\t" << ARROW << "Username: ";
     cin >> user;
-    cout << "\t" << icon[1] << "  Password: ";
+    cout << "\t\t" << ARROW << "Password: ";
     cin >> pass;
 
     ifstream read(user + ".txt");
@@ -543,13 +545,11 @@ void checkOut() {
             cin >> payment;
             if (payment > subtotal) {
                 cout << "        Thank you!"
-                     << " Your change is Php: " << fixed << setprecision(2)
+                     << "Your change is Php: " << fixed << setprecision(2)
                      << (payment - subtotal) << endl;
-                     resetCart();
                 break;
             } else if (payment == subtotal) {
                 cout << "        Thank you!" << endl;
-                resetCart();
                 break;
             } else {
                 cout << endl;
