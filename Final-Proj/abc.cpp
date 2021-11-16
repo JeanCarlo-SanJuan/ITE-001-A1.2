@@ -36,6 +36,7 @@ void showItemsInCategory();
 bool hasSlices();
 void selectItem();
 void removeItem();
+void transRecord();
 void endMsg();
 
 // Globals
@@ -46,6 +47,7 @@ const int MAX_CATEGORY = 8;
 int i, j, k, action, category, item;
 string user, pass, usertxt, passtxt;
 const int W = 40;
+float total;
 
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
@@ -110,15 +112,16 @@ int main() {
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
     const int QUIT = 4;
+    const int ADMIN = 5;
     bool login_success = false;
 
-    string login_words[] = {"Register", "Login", "Guest Login", "Quit"};
+    string login_words[] = {"Register", "Login", "Guest Login", "Quit", "Administrator"};
 
     while (true) {
         cls();
         welcomeScreen();
 
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 5; i++) {
             showItem(i, login_words[i]);
         }
 
@@ -142,6 +145,8 @@ int main() {
                 endMsg();
                 return 0;
                 break;
+            case ADMIN:
+                transRecord();
         }
 
         if (login_success) {
@@ -559,6 +564,7 @@ void checkOut() {
                  << subtotal << " in cash." << endl;
             cout << "        > ";
             float payment = ask<float>("");
+            total += subtotal;
             if (payment > subtotal) {
                 cout << "        Thank you!"
                      << "Your change is Php: " << fixed << setprecision(2)
@@ -574,5 +580,11 @@ void checkOut() {
         }
         break;
     }
+    pause();
+}
+
+void transRecord(){
+    
+    cout<<"\t\tCurrent Total: "<<total;
     pause();
 }
