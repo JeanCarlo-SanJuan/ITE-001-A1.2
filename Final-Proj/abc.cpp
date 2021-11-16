@@ -177,9 +177,8 @@ int main() {
             else
                 transRecord();
                 main();
-        }
-                
-        }
+            }
+            
 
         if (login_success) {
             randomizeStocks();
