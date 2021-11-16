@@ -329,7 +329,8 @@ bool login() {
     ifstream read(user + ".txt");
     getline(read, usertxt);
     getline(read, passtxt);
-
+    read.close();
+    
     for (i = 0; i < 4; i++) {
         if ((user == username[i] && pass == password[i]) ||
             (usertxt == user && passtxt == pass)) {
