@@ -119,7 +119,7 @@ int main() {
         cls();
         welcomeScreen();
 
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < 4; i++) {
             showItem(i, login_words[i]);
         }
 
