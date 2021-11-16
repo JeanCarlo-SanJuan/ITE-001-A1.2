@@ -17,6 +17,7 @@ void pause();
 void wait();
 
 bool login();
+bool adminlogin();
 void menuScreen();
 void loadingScreen();
 void welcomeScreen();
@@ -51,6 +52,8 @@ float total;
 
 string username[4] = {"TIP", "Comp", "Godis", "hello"};
 string password[4] = {"tip44", "science45", "good", "world"};
+string adminuser[1] = {"Admin"};
+string adminpass[1] = {"admin001"};
 
 const string ARROW = "  >  ";
 
@@ -165,7 +168,17 @@ int main() {
                 return 0;
                 break;
             case ADMIN:
+                login_success = adminlogin();
+            if (!login_success)
+            {
+                cout<<"\n\tInvalid account! Please try again.\n\n";
+                pause();
+            }
+            else
                 transRecord();
+                main();
+        }
+                
         }
 
         if (login_success) {
@@ -321,6 +334,26 @@ bool login() {
     for (i = 0; i < 4; i++) {
         if ((user == username[i] && pass == password[i]) ||
             (usertxt == user && passtxt == pass)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool adminlogin() {
+    string apass;
+    string auser;
+    cls();
+    welcomeScreen();
+
+    cout << "\t\tEnter your username and password.";
+    cout << "\n\n\t\t" << ARROW << "Username: ";
+    cin >> auser;
+    cout << "\t\t" << ARROW << "Password: ";
+    cin >> apass;
+
+    for (i = 0; i < 1; i++) {
+        if ((auser == adminuser[i] && apass == adminpass[i])) {
             return true;
         }
     }
