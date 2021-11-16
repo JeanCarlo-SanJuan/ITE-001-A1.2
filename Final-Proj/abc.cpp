@@ -37,6 +37,8 @@ bool hasSlices();
 void selectItem();
 void removeItem();
 
+void endMsg();
+
 // Globals
 time_t current_time;
 const int CAT = 2;
@@ -111,7 +113,7 @@ int main() {
     const int QUIT = 4;
     bool login_success = false;
 
-    string login_words[] = {"Register", "Login", "Guest Login", "Quit"};
+    string login_words[] = {"Register", "Login", "Guest Login",};// "Quit"};
 
     while (true) {
         cls();
@@ -137,9 +139,10 @@ int main() {
             case GUESS_LOGIN:
                 login_success = true;
                 break;
-            case QUIT:
+            /* case QUIT:
+                endMsg();
                 return 0;
-                break;
+                break; */
         }
 
         if (login_success) {
@@ -254,13 +257,16 @@ void menuScreen() {
         main();
         break;
     case 8:
-        cout << "Please come again!\n";
+        endMsg();
         return;
     }
 
     menuScreen();
 }
 
+void endMsg() {
+    cout << "\t\tPlease come again!\n";
+}
 // Items related
 void randomizeStocks() {
     float *stocks;
