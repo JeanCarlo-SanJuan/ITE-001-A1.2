@@ -135,6 +135,7 @@ int main() {
     const int ADMIN = 4;
     const int QUIT = 5;
     bool login_success;
+    bool adminlogin_success;
 
     string login_words[] = {
         "Register", 
@@ -180,8 +181,10 @@ int main() {
                 cout << ENDMSG;
                 return 0;
             case ADMIN:
-                login_success = adminlogin();
-                if (login_success) transRecord();
+                adminlogin_success = adminlogin();
+                if (adminlogin_success){
+                    transRecord();
+                }
                 else {
                     cout<<"\n\t\tInvalid account! Please try again.\n\n";
                     pause();
