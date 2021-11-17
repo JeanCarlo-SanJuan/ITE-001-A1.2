@@ -16,17 +16,12 @@ void cls();
 void pause();
 void wait();
 
-bool login();
-bool adminlogin();
 void menuScreen();
-void userProfile();
 void loadingScreen();
 void welcomeScreen();
 void randomizeStocks();
 void getAction(string);
-void accountRegistration();
 bool askQuantity();
-void saveUserInfo(string, string, int);
 float showCart();
 void resetCart();
 void checkOut();
@@ -39,32 +34,21 @@ bool hasSlices();
 void selectItem();
 void removeItem();
 void transRecord();
-float cashIn();
+
 // Globals
 time_t current_time;
 const int CAT = 2;
 const int MAX_ITEM_ID = 5;
 int i, j, k, action, category, item;
-string user, pass, G_usertxt, G_passtxt;
 const int W = 40;
 float total;
-
-string username[4] = {"Jordan", "Anna", "Michael", "hello"};
-string password[4] = {"123456", "1234", "1234567", "world"};
-float userbalance[4] = {5600, 3000, 1300, 4000};
-int G_usernum = -1;
-bool G_guest = false;
-float G_balance = 0;
-
-// admin
-string adminuser[1] = {"Admin"};
-string adminpass[1] = {"admin001"};
 
 const string ARROW = "  >  ";
 const string ENDMSG = "\n\t\tThank you, Please come again!\n\n";
 const string INVALID_ACCOUNT_MSG = "\n\t\tInvalid account! Please try again.\n\n";
 const int MAX_CATEGORY = 7;
-string G_categories[]{
+
+string G_categories[] = {
     "Bread",
     "Pastries",
     "View Cart",
@@ -89,6 +73,220 @@ string G_names[CAT][5] = {
         "Apple Cake",
         "Brownies"
     }
+};
+
+template <typename T>
+T ask(string msg = "") {
+    T c;
+    do {
+        cout << msg;
+        cin >> c;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore();
+        } else return c;
+    } while (true);
+}
+
+class Account {
+    private:
+        string password;
+        string name;
+        int balance = 0;
+
+        const int predefinedCount = 4;
+        string usernames[4] = {"Jordan", "Anna", "Michael", "hello"};
+        string passwords[4] = {"123456", "1234", "1234567", "world"};
+        float balances[4] = {5600, 3000, 1300, 4000};
+
+        // admin
+        const int predefinedAdmins = 2;
+        string adminuser[2] = {"Admin", "Rey"};
+        string adminpass[2] = {"admin001", "Castillo"};
+
+    public:
+        int loggedIn = -4;
+        const int asAdmin = -1;
+        const int asUser = -2;
+        const int asGuest = -3;
+        const int min_top_up = 100;
+        const int notYet = -4;
+
+        bool registration() {
+            string _name = askUsername();
+            string _pass = askPassword();
+
+            do {
+                cout << "\t\tPlease top up at least Php " << min_top_up << endl;
+                int _amount = cashIn();
+
+                if (_amount == 0) {
+                    cout << "\t\tRegistration cancelled...";
+                    return false;
+                }
+
+                if (_amount >= min_top_up ) {
+                    cout << "\n\t" << ARROW
+                    << "You're now signed up! you may now use your account to login.\n\n";
+                    balance  = _amount;
+                    name = _name;
+                    password = _pass;
+                    loggedIn = asUser;
+                    save();
+                    break;
+
+                }
+                cout << "\n\t\tPlease enter a valid amount!" << endl;
+            } while(true);
+
+            return true;
+        }
+
+        string getName() {
+            return name;
+        }
+
+        int getBalance() {
+            return balance;
+        }
+
+        string askUsername() {
+            string _name;
+            cout << "\t\tEnter your username and password.";
+            cout << "\n\n\t\t" << ARROW << "Username: ";
+            cin >> _name;
+            return _name;
+        }
+
+        string askPassword() {
+            string _pw;
+            cout << "\t\t" << ARROW << "Password: ";
+            cin >> _pw;
+            return _pw;
+        }
+
+        void setBalance(int _amount) {
+            balance = _amount;
+            if (loggedIn == asUser) {
+                save();
+            } else {
+                balances[loggedIn] == balance;
+            }
+        } 
+
+        void profile() {
+            int options_size = 2;
+
+            string profile_options[] = {
+                "Cash in",
+                "Proceed to menu"
+            };
+
+            while (true) {
+                cls();
+                cout << "\n\t\t=================================================\n";
+                cout << "\t\t\t      Welcome to ABC " << name << "!\n";
+                cout << "\t\t=================================================\n\n";
+
+                cout << "\t\tAccount Balance: PHP " << balance << endl << endl;
+                for (i = 0; i < options_size; i++) {
+                    showItem(i, profile_options[i]);
+                }
+                getAction("Your action: ");
+                if (action == 1) {
+                    setBalance(balance += cashIn());
+                } else break;
+            }
+        }
+
+        bool adminLogin() {
+            string _name = askUsername();
+            string _pass = askPassword();
+            //Check Admin accounts
+            for (i = 0; i < predefinedAdmins; i++) {
+                if (_name.compare(usernames[i]) == 0  && _pass.compare(passwords[i]) == 0) {
+                    loggedIn = asAdmin;
+                    name = _name;
+                    password = _pass;
+                        return true;
+                }
+            }
+        }
+
+        bool login() {
+            string _name = askUsername();
+            string _pass = askPassword();
+            string _balance;
+
+            // Check created accounts
+            ifstream read(_name + ".txt");
+            getline(read, name);
+            getline(read, password);
+            getline(read, _balance);
+            read.close();
+
+            if (name.compare(_name) == 0 && password.compare(_pass) == 0) {
+                loggedIn = asUser;
+                balance = stoi(_balance);
+                return true;
+            }
+
+            //Check predefined accounts
+            for (i = 0; i < predefinedCount; i++) {
+                if (_name.compare(usernames[i]) == 0 && _pass.compare(passwords[i])) {
+                    loggedIn = i;
+                    name = _name;
+                    password = _pass;
+                    balance = balances[i]; 
+                    return true;
+                }
+            }
+
+            reset();
+
+            return false;
+        }
+
+        void reset() {
+            name = "";
+            password = "";
+            balance = 0;
+            loggedIn = notYet;
+        }
+
+        void save() {
+            if (loggedIn == asUser) {
+                ofstream file;
+                file.open(name + ".txt");
+                file << name << endl 
+                        << password << endl 
+                        << balance;
+                file.close();
+            }
+        }
+
+        float cashIn() {
+            int _amount;
+            do {
+                cout << endl;
+                _amount = ask<int>("\t\tCash in amount: ");
+
+                if(_amount < 0) {
+                    cout << "\t\tInvalid Amount!\n";
+                    pause();
+                } else break;
+
+            } while (true);
+
+            cout << "\t\ttransaction ";
+            if (_amount == 0) {
+                cout << "cancelled...";
+            } else cout << "success!";
+
+            cout << "\n\t\t================================================" << endl; 
+
+            return _amount;
+        }
 };
 
 // G_data[i][j][k]
@@ -116,18 +314,7 @@ float G_data[CAT][MAX_ITEM_ID][4] = {
     }
 };
 
-template <typename T>
-T ask(string msg = "") {
-    T c;
-    do {
-        cout << msg;
-        cin >> c;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore();
-        } else return c;
-    } while (true);
-}
+Account account;
 
 int main() {
     const int REGISTRATION = 1;
@@ -135,8 +322,6 @@ int main() {
     const int GUESS_LOGIN = 3;
     const int ADMIN = 4;
     const int QUIT = 5;
-    bool login_success;
-    bool adminlogin_success;
 
     string login_words[] = {
         "Register", 
@@ -147,8 +332,6 @@ int main() {
     };
 
     while (true) {
-        login_success = false;
-
         cls();
         welcomeScreen();
 
@@ -160,39 +343,26 @@ int main() {
 
         switch (action) {
             case REGISTRATION:
-                accountRegistration();
+                account.registration();
+                pause();
                 break;
             case MEMBER_LOGIN:
-                login_success = login();
-                if (!login_success) {
-                    cout << INVALID_ACCOUNT_MSG;
-                    pause();
-                }
-                else {
-                    loadingScreen();
-                    userProfile();
-                    break;
+                if (account.login()) {
+                    account.profile();
                 }
                 break;
             case GUESS_LOGIN:
-                G_guest = true;
-                login_success = true;
                 break;
             case QUIT:
                 cout << ENDMSG;
                 return 0;
             case ADMIN:
-                adminlogin_success = adminlogin();
-                if (adminlogin_success){
+                if (account.adminLogin()) {
                     transRecord();
-                }
-                else {
-                    cout << INVALID_ACCOUNT_MSG;
-                    pause();
                 }
         }
 
-        if (login_success) {
+        if (account.loggedIn != -4) {
             randomizeStocks();
             loadingScreen();
             menuScreen();
@@ -201,69 +371,6 @@ int main() {
     }
 
     return 0;
-}
-
-float cashIn()
-{
-    int cash;
-
-    do {
-        cout << endl;
-        cash = ask<int>("\t\tCash in amount: ");
-
-        if(cash < 0) {
-            cout << "\t\tInvalid Amount!\n";
-            pause();
-        } else break;
-
-    } while (true);
-
-    cout << "\t\ttransaction ";
-    if (cash == 0) {
-        cout << "cancelled...";
-    } else cout << "success!";
-
-    cout << "\t\t================================================"; 
-
-    return cash;
-}
-
-void userProfile() {
-    int options_size = 2;
-
-    string profile_options[] = {
-        "Cash in",
-        "Proceed to menu"
-    };
-
-    string _name;
-
-    float *balance;
-    if (G_usernum == -1) {
-        balance = &G_balance;
-        _name = G_usertxt;
-    } else {
-        balance = &userbalance[G_usernum];
-        _name = username[G_usernum];
-    }
-
-    while (true) {
-        cls();
-        cout << "\n\t\t=================================================\n";
-        cout << "\t\t\t      Welcome to ABC " << _name << "!\n";
-        cout << "\t\t=================================================\n\n";
-
-        cout << "\t\tAccount Balance: PHP " << *balance << endl << endl;
-        for (i = 0; i < options_size; i++) {
-            showItem(i, profile_options[i]);
-        }
-        getAction("Your action: ");
-
-        if (action == 1) {
-            *balance += cashIn();
-            saveUserInfo(G_usertxt, G_passtxt, *balance);
-        } else break;
-    }
 }
 
 void cls() { system("cls||clear"); }
@@ -302,41 +409,6 @@ void getAction(string msg = "") {
     action = ask<int>("\n\t\t" + msg);
 }
 
-void saveUserInfo(string _user, string _pass, int amount) {
-    ofstream file;
-    file.open(_user + ".txt");
-    file << _user << endl 
-            << _pass << endl 
-            << amount;
-    file.close();
-}
-// Account related
-void accountRegistration() {
-    cls();
-    welcomeScreen();
-    int min_top_up = 100;
-    int amount;
-    cout << "\t\tType a username and password to register.\n";
-    cout << "\n\t\t" << ARROW << "Select Username: ";
-    cin >> user;
-    cout << "\t\t" << ARROW << "Select Password: ";
-    cin >> pass;
-    cout << "\t\tPlease top up at least Php " << min_top_up << endl;
-    amount = ask<int>("\t\tEnter amount: ");
-
-    if (amount < 0 ) {
-        cout << "\t\tPlease enter a valid amount!";
-    } else if (amount == 0) {
-        cout << "\t\tRegistration cancelled...";
-    } else {
-        cout << "\n\t" << ARROW
-             << "You're now signed up! you may now use your account to login.\n\n";
-
-        saveUserInfo(user, pass, amount);
-        pause();
-    }
-}
-
 void showItem(int index, string item) {
     cout << "\t\t[" << index + 1 << "]" << ARROW << item << endl;
 }
@@ -373,9 +445,8 @@ void menuScreen() {
         case 5:
             checkOut();
             resetCart();
-
             // If the customer is a guest return to login system
-            if (G_guest) {
+            if (account.loggedIn == account.asGuest) {
                 return;
             }
             break;
@@ -403,58 +474,6 @@ void randomizeStocks() {
                        (current_time % int(G_data[category][item][2])) + 5;
         }
     }
-}
-
-bool login() {
-    string pass = "";
-    cls();
-    welcomeScreen();
-
-    cout << "\t\tEnter your username and password.";
-    cout << "\n\n\t\t" << ARROW << "Username: ";
-    cin >> user;
-    cout << "\t\t" << ARROW << "Password: ";
-    cin >> pass;
-
-    string _balance;
-    ifstream read(user + ".txt");
-    getline(read, G_usertxt);
-    getline(read, G_passtxt);
-    getline(read, _balance);
-    read.close();
-
-    if (G_usertxt == user && G_passtxt == pass) {
-            G_balance = stoi(_balance);
-            return true;
-    }
-
-    for (i = 0; i < 4; i++) {
-        if (user == username[i] && pass == password[i]) {
-            G_usernum = i;
-            return true;
-        }
-    }
-    return false;
-}
-
-bool adminlogin() {
-    string apass;
-    string auser;
-    cls();
-    welcomeScreen();
-
-    cout << "\t\tEnter your username and password.";
-    cout << "\n\n\t\t" << ARROW << "Username: ";
-    cin >> auser;
-    cout << "\t\t" << ARROW << "Password: ";
-    cin >> apass;
-
-    for (i = 0; i < 1; i++) {
-        if ((auser == adminuser[i] && apass == adminpass[i])) {
-            return true;
-        }
-    }
-    return false;
 }
 
 void loadingScreen() {
@@ -678,8 +697,6 @@ void checkOut() {
     int payment_method;
     float subtotal = showCart();
 
-    bool pay_in_cash = false;
-    
     if (subtotal > 0) {
         while (true) {
             cout << endl << endl;
@@ -693,11 +710,10 @@ void checkOut() {
             cout << endl;
 
             if (payment_method == 1 || payment_method == 2) {
-                pay_in_cash = payment_method == 2;
                 break;
             } else {
-                    cls();
-                    showCart();
+                cls();
+                showCart();
             }
         }
     }
@@ -725,12 +741,12 @@ void checkOut() {
         }
         break;
     case 2:
-        if (G_balance < subtotal) {
+        if (account.getBalance() < subtotal) {
             cout << "\t\tYour account has insufficient balance,\n\t\tplease top up or try another payment method";
         } else {
-            G_balance -= subtotal;
+            account.setBalance(account.getBalance() - subtotal);
+            total += subtotal;
             cout << "\t\t Successfuly charged to account!";
-            saveUserInfo(G_usertxt, G_passtxt, G_balance);
         }
         break;
     }
