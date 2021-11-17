@@ -40,7 +40,6 @@ void selectItem();
 void removeItem();
 void transRecord();
 float cashIn();
-
 // Globals
 time_t current_time;
 const int CAT = 2;
@@ -63,7 +62,7 @@ string adminpass[1] = {"admin001"};
 
 const string ARROW = "  >  ";
 const string ENDMSG = "\n\t\tThank you, Please come again!\n\n";
-
+const string INVALID_ACCOUNT_MSG = "\n\t\tInvalid account! Please try again.\n\n";
 const int MAX_CATEGORY = 7;
 string G_categories[]{
     "Bread",
@@ -166,7 +165,7 @@ int main() {
             case MEMBER_LOGIN:
                 login_success = login();
                 if (!login_success) {
-                    cout << "\n\t\tInvalid account! Please try again.\n\n";
+                    cout << INVALID_ACCOUNT_MSG;
                     pause();
                 }
                 else {
@@ -188,7 +187,7 @@ int main() {
                     transRecord();
                 }
                 else {
-                    cout<<"\n\t\tInvalid account! Please try again.\n\n";
+                    cout << INVALID_ACCOUNT_MSG;
                     pause();
                 }
         }
@@ -689,7 +688,7 @@ void checkOut() {
             cout << "\t\tPlease enter mode of payment:" << endl
                  << "\t\t[1] Cash" << endl
                  << "\t\t[2] Charge to Account" << endl
-                 << "\t\t> ";
+                 << "\n\t\t> ";
             cin >> payment_method;
             cout << endl;
 
@@ -739,7 +738,6 @@ void checkOut() {
 }
 
 void transRecord(){
-    
     cout<<"\t\tCurrent Total: "<<total;
     pause();
 }
