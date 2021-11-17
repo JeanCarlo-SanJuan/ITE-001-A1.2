@@ -88,12 +88,37 @@ T ask(string msg = "") {
     } while (true);
 }
 
+// G_data[i][j][k]
+// determines...
+// i - category
+// j - item
+// k - price, stock, slices, quantity in cart
+float G_data[CAT][MAX_ITEM_ID][4] = {
+    {
+        // Bread
+        //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
+        {5, 50, 1},  // Pandesal
+        {11, 45, 10}, // Wheat Loaf
+        {6, 80, 1},
+        {12, 40, 1},
+        {15, 30, 1}
+    },
+    {
+        // Pastries
+        {18, 33, 1}, // Peanut Butter Cupcake
+        {35, 43, 6},  // Mocha cake
+        {33, 29, 6},
+        {30, 18, 6},
+        {20, 20, 1}
+    }
+};
 class Account {
     private:
         string password;
         string name;
         int balance = 0;
 
+        // Sample Accounts
         const int predefinedCount = 4;
         string usernames[4] = {"Jordan", "Anna", "Michael", "hello"};
         string passwords[4] = {"123456", "1234", "1234567", "world"};
@@ -134,7 +159,6 @@ class Account {
                     loggedIn = asUser;
                     save();
                     break;
-
                 }
                 cout << "\n\t\tPlease enter a valid amount!" << endl;
             } while(true);
@@ -204,13 +228,14 @@ class Account {
             string _pass = askPassword();
             //Check Admin accounts
             for (i = 0; i < predefinedAdmins; i++) {
-                if (_name.compare(usernames[i]) == 0  && _pass.compare(passwords[i]) == 0) {
+                if ( (_name.compare(adminuser[i]) == 0) && (_pass.compare(adminpass[i]) == 0)) {
                     loggedIn = asAdmin;
                     name = _name;
                     password = _pass;
-                        return true;
+                    return true;
                 }
             }
+            return false;
         }
 
         bool login() {
@@ -225,7 +250,7 @@ class Account {
             getline(read, _balance);
             read.close();
 
-            if (name.compare(_name) == 0 && password.compare(_pass) == 0) {
+            if ( (name.compare(_name) == 0) && (password.compare(_pass) == 0) ) {
                 loggedIn = asUser;
                 balance = stoi(_balance);
                 return true;
@@ -233,7 +258,7 @@ class Account {
 
             //Check predefined accounts
             for (i = 0; i < predefinedCount; i++) {
-                if (_name.compare(usernames[i]) == 0 && _pass.compare(passwords[i])) {
+                if ( (_name.compare(usernames[i]) == 0) && (_pass.compare(passwords[i]) == 0) ) {
                     loggedIn = i;
                     name = _name;
                     password = _pass;
@@ -289,31 +314,6 @@ class Account {
         }
 };
 
-// G_data[i][j][k]
-// determines...
-// i - category
-// j - item
-// k - price, stock, slices, quantity in cart
-float G_data[CAT][MAX_ITEM_ID][4] = {
-    {
-        // Bread
-        //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
-        {5, 50, 1},  // Pandesal
-        {11, 45, 10}, // Wheat Loaf
-        {6, 80, 1},
-        {12, 40, 1},
-        {15, 30, 1}
-    },
-    {
-        // Pastries
-        {18, 33, 1}, // Peanut Butter Cupcake
-        {35, 43, 6},  // Mocha cake
-        {33, 29, 6},
-        {30, 18, 6},
-        {20, 20, 1}
-    }
-};
-
 Account account;
 
 int main() {
@@ -334,6 +334,7 @@ int main() {
     while (true) {
         cls();
         welcomeScreen();
+        account.reset();
 
         for (i = 0; i < 5; i++) {
             showItem(i, login_words[i]);
