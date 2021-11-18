@@ -262,7 +262,10 @@ void userProfile() {
         if (action == 1) {
             *balance += cashIn();
             saveUserInfo(G_usertxt, G_passtxt, *balance);
-        } else break;
+        } else if (action == 2){
+            loadingScreen();
+            menuScreen();
+        } else userProfile();
     }
 }
 
