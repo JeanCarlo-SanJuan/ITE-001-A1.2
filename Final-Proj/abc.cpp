@@ -131,11 +131,13 @@ class Account {
         string adminpass[2] = {"admin001", "Castillo"};
 
     public:
+        const int min_top_up = 100;
         int loggedIn = -4;
+
+        //Login states
         const int asAdmin = -1;
         const int asUser = -2;
         const int asGuest = -3;
-        const int min_top_up = 100;
         const int notYet = -4;
 
         bool registration() {
@@ -365,7 +367,7 @@ int main() {
                 }
         }
 
-        if (account.loggedIn != -4) {
+        if (account.loggedIn != account.notYet) {
             randomizeStocks();
             loadingScreen();
             menuScreen();
