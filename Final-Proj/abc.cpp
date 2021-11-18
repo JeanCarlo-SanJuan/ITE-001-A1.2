@@ -397,13 +397,11 @@ void menuScreen() {
 
 // Items related
 void randomizeStocks() {
-    float *stocks;
+    time(&current_time);
+
     for (category = 0; category < CAT; category++) {
         for (item = 0; item < MAX_ITEM_ID; item++) {
-            stocks = &G_data[category][item][1];
-            *stocks += current_time % 100;
-            *stocks += (int(pow(*stocks, 2)) % 100) +
-                       (current_time % int(G_data[category][item][2])) + 5;
+            G_data[category][item][1] += current_time % 100;
         }
     }
 }
