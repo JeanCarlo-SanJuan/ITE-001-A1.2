@@ -60,7 +60,7 @@ string G_vouchers[G_sampleSize] = {"ITE001PASSED", "HESOYAM", "COMPUTERSCIENCE",
 //From oop implementation
 string G_name;
 string G_password;
-int G_balance;
+float G_balance;
 
 const int asAdmin = -1, asUser = -2, asGuest = -3, notYet = -4;
 int loggedIn = notYet;
@@ -252,7 +252,14 @@ void userProfile() {
 
         if (action == 1) {
             G_balance += cashIn();
-            saveUserInfo(G_name, G_password, G_balance);
+
+            if (loggedIn > asAdmin) {
+                G_balances[loggedIn] = G_balance; 
+            }
+
+            if (loggedIn == asUser) {
+                saveUserInfo(G_name, G_password, G_balance);
+            } 
         } else if (action == 2){
             break;
         } else userProfile();
@@ -423,7 +430,7 @@ bool login() {
             G_name = _name;
             G_password = _pass;
             //Todo
-            G_balance = G_balances[i]; 
+            G_balance = G_balances[i];
             return true;
         }
     }
@@ -691,14 +698,15 @@ void checkOut() {
             cout << "\t\tPlease enter mode of payment:" << endl
                  << "\t\t[1] Cash" << endl;
 
-            if (loggedIn == asUser) {
+            if (loggedIn == asUser || loggedIn > asAdmin) {
                 cout << "\t\t[2] Charge to Account" << endl;
             }
             cout << "\n\t\t> ";
             cin >> payment_method;
             cout << endl;
 
-            if ((payment_method == 1) || (loggedIn == asUser && payment_method == 2) ) {
+            if ((payment_method == 1) || 
+                ((payment_method == 2) && (loggedIn == asUser || loggedIn > asAdmin))) {
               cls();
               showCart();
             }
@@ -781,6 +789,12 @@ void checkOut() {
             cout << "\t\tYour account has insufficient balance,\n\t\tplease top up or try another payment method";
         } else {
             G_balance -= subtotal;
+
+            //Since G_balance doesn't point to the original element
+            if (loggedIn > -1) {
+                G_balances[loggedIn] = G_balance;
+            }
+
             ototal = subtotal;
             cout << "\t\t Successfuly charged to account!";
             saveUserInfo(G_name, G_password, G_balance);
