@@ -31,6 +31,8 @@ float showCart();
 void resetCart();
 void checkOut();
 
+void accountReset();
+void askCredentials();
 void showCategory(string);
 void showItem(int, string);
 void showItemInfo(int);
@@ -40,31 +42,38 @@ void selectItem();
 void removeItem();
 void transRecord();
 float cashIn();
+
 // Globals
 time_t current_time;
 const int CAT = 2;
 const int MAX_ITEM_ID = 5;
 int i, j, k, action, category, item;
-string user, pass, G_usertxt, G_passtxt;
 const int W = 40;
-float total, ototal;
+float G_current_sales, ototal;
 
-string username[4] = {"Jordan", "Anna", "Michael", "hello"};
-string password[4] = {"123456", "1234", "1234567", "world"};
-string vouchers[4] = {"ITE001PASSED", "HESOYAM", "COMPUTERSCIENCE", "DISCOUNTSFORALL"};
-float userbalance[4] = {5600, 3000, 1300, 4000};
-int G_usernum = -1;
-bool G_guest = false;
-float G_balance = 0;
+const int G_sampleSize = 4;
+string G_usernames[G_sampleSize] = {"Jordan", "Anna", "Michael", "hello"};
+string G_passwords[G_sampleSize] = {"123456", "1234", "1234567", "world"};
+float G_balances[G_sampleSize] = {5600, 3000, 1300, 4000};
+string G_vouchers[G_sampleSize] = {"ITE001PASSED", "HESOYAM", "COMPUTERSCIENCE", "DISCOUNTSFORALL"};
+
+//From oop implementation
+string G_name;
+string G_password;
+int G_balance;
+
+const int asAdmin = -1, asUser = -2, asGuest = -3, notYet = -4;
+int loggedIn = notYet;
 
 // admin
-string adminuser[1] = {"Admin"};
-string adminpass[1] = {"admin001"};
+string G_adminNames[1] = {"Admin"};
+string G_adminPasswords[1] = {"admin001"};
 
 const string ARROW = "  >  ";
 const string ENDMSG = "\n\t\tThank you, Please come again!\n\n";
 const string INVALID_ACCOUNT_MSG = "\n\t\tInvalid account! Please try again.\n\n";
 const int MAX_CATEGORY = 7;
+
 string G_categories[]{
     "Bread",
     "Pastries",
@@ -136,8 +145,6 @@ int main() {
     const int GUESS_LOGIN = 3;
     const int ADMIN = 4;
     const int QUIT = 5;
-    bool login_success;
-    bool adminlogin_success;
 
     string login_words[] = {
         "Register", 
@@ -148,8 +155,6 @@ int main() {
     };
 
     while (true) {
-        login_success = false;
-
         cls();
         welcomeScreen();
 
@@ -164,27 +169,24 @@ int main() {
                 accountRegistration();
                 break;
             case MEMBER_LOGIN:
-                login_success = login();
-                if (!login_success) {
+                if (login()) {
+                    loggedIn = asUser;
+                    loadingScreen();
+                    userProfile();
+
+                } else {
                     cout << INVALID_ACCOUNT_MSG;
                     pause();
                 }
-                else {
-                    loadingScreen();
-                    userProfile();
-                    break;
-                }
                 break;
             case GUESS_LOGIN:
-                G_guest = true;
-                login_success = true;
+                loggedIn = asGuest;
                 break;
             case QUIT:
                 cout << ENDMSG;
                 return 0;
             case ADMIN:
-                adminlogin_success = adminlogin();
-                if (adminlogin_success){
+                if (adminlogin()) {
                     transRecord();
                 }
                 else {
@@ -193,7 +195,7 @@ int main() {
                 }
         }
 
-        if (login_success) {
+        if (loggedIn != notYet) {
             randomizeStocks();
             loadingScreen();
             menuScreen();
@@ -237,35 +239,23 @@ void userProfile() {
         "Proceed to menu"
     };
 
-    string _name;
-
-    float *balance;
-    if (G_usernum == -1) {
-        balance = &G_balance;
-        _name = G_usertxt;
-    } else {
-        balance = &userbalance[G_usernum];
-        _name = username[G_usernum];
-    }
-
     while (true) {
         cls();
         cout << "\n\t\t=================================================\n";
-        cout << "\t\t\t      Welcome to ABC " << _name << "!\n";
+        cout << "\t\t\t      Welcome to ABC " << G_name << "!\n";
         cout << "\t\t=================================================\n\n";
 
-        cout << "\t\tAccount Balance: PHP " << *balance << endl << endl;
+        cout << "\t\tAccount Balance: PHP " << G_balance << endl << endl;
         for (i = 0; i < options_size; i++) {
             showItem(i, profile_options[i]);
         }
         getAction("Your action: ");
 
         if (action == 1) {
-            *balance += cashIn();
-            saveUserInfo(G_usertxt, G_passtxt, *balance);
+            G_balance += cashIn();
+            saveUserInfo(G_name, G_password, G_balance);
         } else if (action == 2){
-            loadingScreen();
-            menuScreen();
+            break;
         } else userProfile();
     }
 }
@@ -314,6 +304,7 @@ void saveUserInfo(string _user, string _pass, int amount) {
             << amount;
     file.close();
 }
+
 // Account related
 void accountRegistration() {
     cls();
@@ -322,9 +313,9 @@ void accountRegistration() {
     int amount;
     cout << "\t\tType a username and password to register.\n";
     cout << "\n\t\t" << ARROW << "Select Username: ";
-    cin >> user;
+    cin >> G_name;
     cout << "\t\t" << ARROW << "Select Password: ";
-    cin >> pass;
+    cin >> G_password;
     cout << "\t\tPlease top up at least Php " << min_top_up << endl;
     amount = ask<int>("\t\tEnter amount: ");
 
@@ -335,8 +326,7 @@ void accountRegistration() {
     } else {
         cout << "\n\t" << ARROW
              << "You're now signed up! you may now use your account to login.\n\n";
-
-        saveUserInfo(user, pass, amount);
+        saveUserInfo(G_name, G_password, amount);
         pause();
     }
 }
@@ -379,7 +369,7 @@ void menuScreen() {
             resetCart();
 
             // If the customer is a guest return to login system
-            if (G_guest) {
+            if (loggedIn == asGuest) {
                 return;
             }
             break;
@@ -407,55 +397,70 @@ void randomizeStocks() {
     }
 }
 
-bool login() {
-    string pass = "";
+bool login() {    
     cls();
     welcomeScreen();
+    askCredentials();
 
-    cout << "\t\tEnter your username and password.";
-    cout << "\n\n\t\t" << ARROW << "Username: ";
-    cin >> user;
-    cout << "\t\t" << ARROW << "Password: ";
-    cin >> pass;
-
-    string _balance;
-    ifstream read(user + ".txt");
-    getline(read, G_usertxt);
-    getline(read, G_passtxt);
+    string _name, _pass, _balance;
+    ifstream read(G_name + ".txt");
+    getline(read, _name);
+    getline(read, _pass);
     getline(read, _balance);
     read.close();
 
-    if (G_usertxt == user && G_passtxt == pass) {
-            G_balance = stoi(_balance);
-            return true;
+    if ( (G_name.compare(_name) == 0) && (G_password.compare(_pass) == 0) ) {
+        G_name = _name;
+        loggedIn = asUser;
+        G_password = _pass;
+        G_balance = stoi(_balance);
+        return true;
     }
 
-    for (i = 0; i < 4; i++) {
-        if (user == username[i] && pass == password[i]) {
-            G_usernum = i;
+    //Check predefined accounts
+    for (i = 0; i < G_sampleSize; i++) {
+        if ( (G_name.compare(G_usernames[i]) == 0) && (G_password.compare(G_passwords[i]) == 0) ) {
+            loggedIn = i;
+            G_name = _name;
+            G_password = _pass;
+            //Todo
+            G_balance = G_balances[i]; 
             return true;
         }
     }
+
+    accountReset();
     return false;
 }
 
-bool adminlogin() {
-    string apass;
-    string auser;
-    cls();
-    welcomeScreen();
+void accountReset() {
+    G_name = "";
+    G_password = "";
+    G_balance = 0;
+    loggedIn = notYet;
+}
 
+void askCredentials()  {
     cout << "\t\tEnter your username and password.";
     cout << "\n\n\t\t" << ARROW << "Username: ";
-    cin >> auser;
+    cin >> G_name;
     cout << "\t\t" << ARROW << "Password: ";
-    cin >> apass;
+    cin >> G_password;
+}
 
+bool adminlogin() {
+    cls();
+    welcomeScreen();
+    askCredentials();
     for (i = 0; i < 1; i++) {
-        if ((auser == adminuser[i] && apass == adminpass[i])) {
+        if (
+            (G_name.compare(G_adminNames[i]) == 0) && 
+            (G_password.compare(G_adminPasswords[i]) == 0)) {
             return true;
         }
     }
+
+    accountReset();
     return false;
 }
 
@@ -680,27 +685,26 @@ void checkOut() {
     int payment_method, discount_mode;
     float subtotal = showCart();
 
-    bool pay_in_cash = false;
-    
     if (subtotal > 0) {
         while (true) {
-            cout << endl << endl;
             showCategory("Checkout");
 
             cout << "\t\tPlease enter mode of payment:" << endl
-                 << "\t\t[1] Cash" << endl
-                 << "\t\t[2] Charge to Account" << endl
-                 << "\n\t\t> ";
+                 << "\t\t[1] Cash" << endl;
+
+            if (loggedIn == asUser) {
+                cout << "\t\t[2] Charge to Account" << endl;
+            }
+            cout << "\n\t\t> ";
             cin >> payment_method;
             cout << endl;
 
-            if (payment_method == 1 || payment_method == 2) {
-                pay_in_cash = payment_method == 2;
-            } else {
+            if ((payment_method == 1) || (loggedIn == asUser && payment_method == 2) ) {
               cls();
               showCart();
             }
 
+            cout << endl;
             cout << "\t\tVouchers/Discouts:" << endl
                  << "\t\t[1] Senior Citizen/Person with Disability" << endl
                  << "\t\t[2] Promo Voucher" << endl
@@ -730,12 +734,11 @@ void checkOut() {
         cout << "\t\tPlease enter your voucher code or type QUIT to exit:" << endl
              << "\t\t> ";
         cin >> voucher_code;
-        cout >> endl;
         if (voucher_code == "QUIT") {
           with_voucher = false;
         }
         for (int idx = 0; idx < 4; idx++) {
-          if (voucher_code.compare(vouchers[idx]) == 0) {
+          if (voucher_code.compare(G_vouchers[idx]) == 0) {
             with_voucher = true;
           }
         }
@@ -759,7 +762,7 @@ void checkOut() {
                  << subtotal << " in cash." << endl;
             cout << "\t\t> ";
             float payment = ask<float>("");
-            total += subtotal;
+            G_current_sales += subtotal;
             if (payment > subtotal) {
                 cout << "\n\t\tThank you!\n"
                      << "\t\tYour change is Php: " << fixed << setprecision(2)
@@ -781,7 +784,7 @@ void checkOut() {
             G_balance -= subtotal;
             ototal = subtotal;
             cout << "\t\t Successfuly charged to account!";
-            saveUserInfo(G_usertxt, G_passtxt, G_balance);
+            saveUserInfo(G_name, G_password, G_balance);
         }
         break;
     }
@@ -789,6 +792,6 @@ void checkOut() {
 }
 
 void transRecord(){
-    cout<<"\t\tCurrent Total: Php "<<total + ototal;
+    cout<<"\t\tCurrent Total: Php "<< G_current_sales + ototal;
     pause();
 }
