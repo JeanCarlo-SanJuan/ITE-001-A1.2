@@ -170,7 +170,6 @@ int main() {
                 break;
             case MEMBER_LOGIN:
                 if (login()) {
-                    loggedIn = asUser;
                     loadingScreen();
                     userProfile();
 
