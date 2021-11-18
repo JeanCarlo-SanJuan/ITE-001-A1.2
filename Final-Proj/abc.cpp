@@ -722,7 +722,7 @@ void checkOut() {
 
     switch (discount_mode) {
     case 1:
-      cout << "You have a 20% discount applied.";
+      cout << "\t\tYou have a 20% discount applied." << endl;;
       subtotal = subtotal * 0.80;
       break;
     case 2:
