@@ -106,7 +106,7 @@ string G_names[CAT][5] = {
 // i - category
 // j - item
 // k - price, stock, slices, quantity in cart
-float G_data[CAT][MAX_ITEM_ID][4] = {
+int G_data[CAT][MAX_ITEM_ID][4] = {
     {
         // Bread
         //{price per slice, stock in slices, slices per whole (1 means 1 whole ), quantity in cart by slices}
@@ -191,6 +191,7 @@ int main() {
                     cout << INVALID_ACCOUNT_MSG;
                     pause();
                 }
+                break;
         }
 
         if (loggedIn != notYet) {
@@ -588,16 +589,17 @@ void removeItem() {
         getAction("Which item would you like to remove? ");
         int target = action - 1;
         bool done = false;
-        float *in_cart;
+        int *in_cart;
         i = 0; // as a counter
         for (category = 0; category < CAT; category++) {
 
             if (done) break;
             
             for (item = 0; item < MAX_ITEM_ID; item++) {
-                    in_cart = &G_data[category][item][3];
+                in_cart = &G_data[category][item][3];
+
                 if (*in_cart > 0) {
-                    if (i == (target)) {
+                    if (i == target) {
                         G_data[category][item][1] += *in_cart;
                         *in_cart = 0;
                         done = true;
