@@ -143,14 +143,13 @@ int main() {
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
-    const int ADMIN = 4;
-    const int QUIT = 5;
+    const int QUIT = 4;
+    const int ADMIN = 5;
 
     string login_words[] = {
         "Register", 
         "Login", 
-        "Guest Login", 
-        "Administrator", 
+        "Guest Login",
         "Quit"
     };
 
@@ -158,7 +157,7 @@ int main() {
         cls();
         welcomeScreen();
 
-        for (i = 0; i < 5; i++) {
+        for (i = 0; i < 4; i++) {
             showItem(i, login_words[i]);
         }
 
@@ -711,8 +710,8 @@ void checkOut() {
               showCart();
             }
 
-            cout << endl;
-            cout << "\t\tVouchers/Discouts:" << endl
+            cout << endl << endl;
+            cout << "\t\tVouchers/Discounts:" << endl
                  << "\t\t[1] Senior Citizen/Person with Disability" << endl
                  << "\t\t[2] Promo Voucher" << endl
                  << "\t\t[3] None" << endl
@@ -731,7 +730,7 @@ void checkOut() {
 
     switch (discount_mode) {
     case 1:
-      cout << "You have a 20% discount applied.";
+      cout << "\t\tYou have a 20% discount applied." << endl;;
       subtotal = subtotal * 0.80;
       break;
     case 2:
@@ -753,8 +752,9 @@ void checkOut() {
       if (with_voucher) {
         double discount;
         discount = 10 + rand() % 30;
+        cout << endl;
         cout << "\t\tYou have a "
-             << 100 - discount
+             << discount
              << "% discount applied."
              << endl;
         subtotal = subtotal * ((100 - discount) / 100);
