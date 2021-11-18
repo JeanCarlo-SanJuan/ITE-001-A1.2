@@ -703,7 +703,7 @@ void checkOut() {
             }
 
             cout << endl << endl;
-            cout << "\t\tVouchers/Discouts:" << endl
+            cout << "\t\tVouchers/Discounts:" << endl
                  << "\t\t[1] Senior Citizen/Person with Disability" << endl
                  << "\t\t[2] Promo Voucher" << endl
                  << "\t\t[3] None" << endl
@@ -744,8 +744,9 @@ void checkOut() {
       if (with_voucher) {
         double discount;
         discount = 10 + rand() % 30;
+        cout << endl;
         cout << "\t\tYou have a "
-             << 100 - discount
+             << discount
              << "% discount applied."
              << endl;
         subtotal = subtotal * ((100 - discount) / 100);
