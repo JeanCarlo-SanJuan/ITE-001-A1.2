@@ -37,6 +37,7 @@ void transRecord();
 
 // Globals
 time_t current_time;
+
 const int CAT = 2;
 const int MAX_ITEM_ID = 5;
 int i, j, k, action, category, item;
@@ -88,7 +89,7 @@ T ask(string msg = "") {
     } while (true);
 }
 
-// G_data[i][j][k]
+    // G_data[i][j][k]
 // determines...
 // i - category
 // j - item
@@ -353,6 +354,7 @@ int main() {
                 }
                 break;
             case GUESS_LOGIN:
+                account.loggedIn = account.asGuest;
                 break;
             case QUIT:
                 cout << ENDMSG;
@@ -466,13 +468,11 @@ void menuScreen() {
 
 // Items related
 void randomizeStocks() {
-    float *stocks;
+    time(&current_time);
+
     for (category = 0; category < CAT; category++) {
         for (item = 0; item < MAX_ITEM_ID; item++) {
-            stocks = &G_data[category][item][1];
-            *stocks += current_time % 100;
-            *stocks += (int(pow(*stocks, 2)) % 100) +
-                       (current_time % int(G_data[category][item][2])) + 5;
+            G_data[category][item][1] += current_time % 100;
         }
     }
 }
