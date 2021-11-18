@@ -47,7 +47,7 @@ const int MAX_ITEM_ID = 5;
 int i, j, k, action, category, item;
 string user, pass, G_usertxt, G_passtxt;
 const int W = 40;
-float total;
+float total, ototal;
 
 string username[4] = {"Jordan", "Anna", "Michael", "hello"};
 string password[4] = {"123456", "1234", "1234567", "world"};
@@ -729,6 +729,7 @@ void checkOut() {
             cout << "\t\tYour account has insufficient balance,\n\t\tplease top up or try another payment method";
         } else {
             G_balance -= subtotal;
+            ototal = subtotal;
             cout << "\t\t Successfuly charged to account!";
             saveUserInfo(G_usertxt, G_passtxt, G_balance);
         }
@@ -738,6 +739,6 @@ void checkOut() {
 }
 
 void transRecord(){
-    cout<<"\t\tCurrent Total: "<<total;
+    cout<<"\t\tCurrent Total: Php "<<total + ototal;
     pause();
 }
