@@ -702,7 +702,7 @@ void checkOut() {
               showCart();
             }
 
-            cout << endl;
+            cout << endl << endl;
             cout << "\t\tVouchers/Discouts:" << endl
                  << "\t\t[1] Senior Citizen/Person with Disability" << endl
                  << "\t\t[2] Promo Voucher" << endl
