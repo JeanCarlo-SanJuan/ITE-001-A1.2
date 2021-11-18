@@ -143,14 +143,13 @@ int main() {
     const int REGISTRATION = 1;
     const int MEMBER_LOGIN = 2;
     const int GUESS_LOGIN = 3;
-    const int ADMIN = 4;
-    const int QUIT = 5;
+    const int QUIT = 4;
+    const int ADMIN = 5;
 
     string login_words[] = {
         "Register", 
         "Login", 
-        "Guest Login", 
-        "Administrator", 
+        "Guest Login",
         "Quit"
     };
 
@@ -158,7 +157,7 @@ int main() {
         cls();
         welcomeScreen();
 
-        for (i = 0; i < 5; i++) {
+        for (i = 0; i < 4; i++) {
             showItem(i, login_words[i]);
         }
 
