@@ -51,6 +51,7 @@ float total, ototal;
 
 string username[4] = {"Jordan", "Anna", "Michael", "hello"};
 string password[4] = {"123456", "1234", "1234567", "world"};
+string vouchers[4] = {"ITE001PASSED", "HESOYAM", "COMPUTERSCIENCE", "DISCOUNTSFORALL"};
 float userbalance[4] = {5600, 3000, 1300, 4000};
 int G_usernum = -1;
 bool G_guest = false;
@@ -676,7 +677,7 @@ float showCart() {
 }
 
 void checkOut() {
-    int payment_method;
+    int payment_method, discount_mode;
     float subtotal = showCart();
 
     bool pay_in_cash = false;
@@ -695,12 +696,60 @@ void checkOut() {
 
             if (payment_method == 1 || payment_method == 2) {
                 pay_in_cash = payment_method == 2;
-                break;
             } else {
-                    cls();
-                    showCart();
+              cls();
+              showCart();
+            }
+
+            cout << "\t\tVouchers/Discouts:" << endl
+                 << "\t\t[1] Senior Citizen/Person with Disability" << endl
+                 << "\t\t[2] Promo Voucher" << endl
+                 << "\t\t[3] None" << endl
+                 << "\n\t\t> ";
+            cin >> discount_mode;
+            cout << endl;
+
+            if (discount_mode == 1 || discount_mode == 2 || discount_mode == 3) {
+              break;
+            } else {
+              cls();
+              showCart();
             }
         }
+    }
+
+    switch (discount_mode) {
+    case 1:
+      cout << "You have a 20% discount applied.";
+      subtotal = subtotal * 0.80;
+      break;
+    case 2:
+      bool with_voucher;
+      while (!with_voucher) {
+        string voucher_code;
+        cout << "\t\tPlease enter your voucher code or type QUIT to exit:" << endl
+             << "\t\t> ";
+        cin >> voucher_code;
+        cout >> endl;
+        if (voucher_code == "QUIT") {
+          with_voucher = false;
+        }
+        for (int idx = 0; idx < 4; idx++) {
+          if (voucher_code.compare(vouchers[idx]) == 0) {
+            with_voucher = true;
+          }
+        }
+      }
+      if (with_voucher) {
+        double discount;
+        discount = 10 + rand() % 30;
+        cout << "\t\tYou have a "
+             << 100 - discount
+             << "% discount applied."
+             << endl;
+        subtotal = subtotal * ((100 - discount) / 100);
+      }
+      break;
     }
 
     switch (payment_method) {
