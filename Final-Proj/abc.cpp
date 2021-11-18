@@ -49,7 +49,7 @@ const int CAT = 2;
 const int MAX_ITEM_ID = 5;
 int i, j, k, action, category, item;
 const int W = 40;
-float G_current_sales, ototal;
+float G_current_sales;
 
 const int G_sampleSize = 4;
 string G_usernames[G_sampleSize] = {"Jordan", "Anna", "Michael", "hello"};
@@ -171,7 +171,6 @@ int main() {
                 if (login()) {
                     loadingScreen();
                     userProfile();
-
                 } else {
                     cout << INVALID_ACCOUNT_MSG;
                     pause();
@@ -183,14 +182,14 @@ int main() {
             case QUIT:
                 cout << ENDMSG;
                 return 0;
+                break;
             case ADMIN:
                 if (adminlogin()) {
                     transRecord();
+                    continue;
                 }
-                else {
-                    cout << INVALID_ACCOUNT_MSG;
-                    pause();
-                }
+                cout << INVALID_ACCOUNT_MSG;
+                pause();
                 break;
         }
 
@@ -219,13 +218,6 @@ float cashIn()
         } else break;
 
     } while (true);
-
-    cout << "\t\ttransaction ";
-    if (cash == 0) {
-        cout << "cancelled...";
-    } else cout << "success!";
-
-    cout << "\t\t================================================"; 
 
     return cash;
 }
@@ -526,10 +518,10 @@ void selectItem() {
 }
 
 bool askQuantity() {
-    int stock = G_data[category][item][1]; // Todo convert to pointer
+    int *stock = &G_data[category][item][1];
     string item_name = G_names[category][item];
 
-    if (stock <= 0) {
+    if (*stock <= 0) {
         cout << "\t\tSorry we're out of stock of " + item_name +
                     "\n\t\tPlease choose another item from the menu\n";
         pause();
@@ -552,18 +544,19 @@ bool askQuantity() {
     if (input_slices == 0) {
         return true;
     }
-    if (input_slices > 0) {
-        if (input_slices <= stock) {
+
+    if (input_slices < 0) {
+        inputError();
+    } else {
+        if (input_slices <= *stock) {
             G_data[category][item][3] += input_slices;
-            G_data[category][item][1] -= input_slices;
+            *stock -= input_slices;
             cout << "\t\tAdded to cart!\n";
             pause();
             return false;
         }
         cout << "\t\tNot enough stock!\n";
         pause();
-    } else {
-        inputError();
     }
 
     return true;
@@ -584,45 +577,55 @@ void resetCart() {
 void removeItem() {
     if (showCart() == 0) {
         pause();
-    } else {
-        char removeYN;
-        getAction("Which item would you like to remove? ");
-        int target = action - 1;
-        bool done = false;
-        int *in_cart;
-        i = 0; // as a counter
-        for (category = 0; category < CAT; category++) {
+        return;
+    }
+    getAction("\n\tWhich item would you like to remove? ");
+    int target = action - 1;
+    bool done = false;
+    int *in_cart;
+    i = 0; // as a counter
+    for (category = 0; category < CAT; category++) {
+        if (done) break;
+        
+        for (item = 0; item < MAX_ITEM_ID; item++) {
+            in_cart = &G_data[category][item][3];
 
-            if (done) break;
-            
-            for (item = 0; item < MAX_ITEM_ID; item++) {
-                in_cart = &G_data[category][item][3];
-
-                if (*in_cart > 0) {
-                    if (i == target) {
-                        G_data[category][item][1] += *in_cart;
-                        *in_cart = 0;
-                        done = true;
-                        break;
-                    } else {
-                        i++;    
-                    }
+            if (*in_cart > 0) {
+                if (i != target) {
+                    i++;
+                } else {
+                    G_data[category][item][1] += *in_cart;
+                    *in_cart = 0;
+                    done = true;
+                    break;
                 }
             }
         }
+    }
 
-        if (showCart() > 0) {
-            // ask if user wants to remove some more
-            cout << "\tWould you like to remove other items?: (Y/N) ";
-            cin >> removeYN;
-            if (removeYN == 'Y' || removeYN == 'y') {
+    cls();
+    if (showCart() <= 0) {
+        pause();
+        return;
+    }
+
+    char response;
+    while (true) {
+        // ask if user wants to remove some more
+        cout << "\n\n\tWould you like to remove other items?: (Y/N) ";
+        cin >> response;
+        
+        switch(response) {
+            case 'Y': case 'y':
                 cls();
-                removeItem();
-            } else if (removeYN == 'N' || removeYN == 'n') {
-                showCart();
-            } else
+                return removeItem();
+                break;
+            case 'N': case 'n':
+                return;
+                break;
+            default:
                 inputError();
-        } else pause();
+        }
     }
 }
 
@@ -789,6 +792,8 @@ void checkOut() {
     case 2:
         if (G_balance < subtotal) {
             cout << "\t\tYour account has insufficient balance,\n\t\tplease top up or try another payment method";
+            pause();
+            return checkOut();
         } else {
             G_balance -= subtotal;
 
@@ -797,7 +802,7 @@ void checkOut() {
                 G_balances[loggedIn] = G_balance;
             }
 
-            ototal = subtotal;
+            G_current_sales += subtotal;
             cout << "\t\t Successfuly charged to account!";
             saveUserInfo(G_name, G_password, G_balance);
         }
@@ -807,6 +812,6 @@ void checkOut() {
 }
 
 void transRecord(){
-    cout<<"\t\tCurrent Total: Php "<< G_current_sales + ototal;
+    cout<<"\t\tCurrent Total: Php "<< G_current_sales;
     pause();
 }
