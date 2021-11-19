@@ -613,7 +613,6 @@ void removeItem() {
         }
     }
 
-    cls();
     if (showCart() <= 0) {
         pause();
         return;
@@ -706,8 +705,8 @@ void checkOut() {
     float subtotal = showCart();
 
     if (subtotal <= 0) return;
-
     while (true) {
+        cout << endl;
         showCategory("Checkout");
 
         cout << "\t\tPlease enter mode of payment:" << endl
