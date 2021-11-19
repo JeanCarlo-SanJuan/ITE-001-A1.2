@@ -319,6 +319,7 @@ void accountRegistration() {
         
         if (amount == 0) {
             cout << "\t\tRegistration cancelled...";
+            pause();
             break;
         }
 
