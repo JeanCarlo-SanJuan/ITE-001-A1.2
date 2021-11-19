@@ -308,26 +308,33 @@ void saveUserInfo(string _user, string _pass, float amount) {
 void accountRegistration() {
     cls();
     welcomeScreen();
-    int min_top_up = 100;
-    int amount;
     cout << "\t\tType a username and password to register.\n";
     cout << "\n\t\t" << ARROW << "Select Username: ";
     cin >> G_name;
     cout << "\t\t" << ARROW << "Select Password: ";
     cin >> G_password;
-    cout << "\t\tPlease top up at least Php " << min_top_up << endl;
-    amount = ask<int>("\t\tEnter amount: ");
 
-    if (amount < 0 ) {
-        cout << "\t\tPlease enter a valid amount!";
-    } else if (amount == 0) {
-        cout << "\t\tRegistration cancelled...";
-    } else {
-        cout << "\n\t" << ARROW
-             << "You're now signed up! you may now use your account to login.\n\n";
-        saveUserInfo(G_name, G_password, amount);
-        pause();
-    }
+    const int min_top_up = 100;
+    int amount;
+    do {
+        cout << "\n\t\tPlease top up at least Php " << min_top_up << endl;
+        amount = ask<int>("\t\t" + ARROW + "Enter amount: ");
+        
+        if (amount == 0) {
+            cout << "\t\tRegistration cancelled...";
+            break;
+        }
+
+        if (amount >= min_top_up) {
+            cout << "\n\t\t" << ARROW
+                 << "You're now signed up! you may now use your account to login.\n\n";
+            saveUserInfo(G_name, G_password, amount);
+            pause();
+            break;
+        }
+
+        cout << "\t\tPlease enter a valid amount!\n";
+    } while (amount < min_top_up);
 }
 
 void showItem(int index, string item) {
