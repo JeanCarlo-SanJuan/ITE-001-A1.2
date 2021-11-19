@@ -26,7 +26,7 @@ void randomizeStocks();
 void getAction(string);
 void accountRegistration();
 bool askQuantity();
-void saveUserInfo(string, string, int);
+void saveUserInfo(string, string, float);
 float showCart();
 void resetCart();
 void checkOut();
@@ -207,11 +207,11 @@ int main() {
 
 float cashIn()
 {
-    int cash;
+    float cash;
 
     do {
         cout << endl;
-        cash = ask<int>("\t\tCash in amount: ");
+        cash = ask<float>("\t\tCash in amount: ");
 
         if(cash < 0) {
             cout << "\t\tInvalid Amount!\n";
@@ -295,12 +295,12 @@ void getAction(string msg = "") {
     action = ask<int>("\n\t\t" + msg);
 }
 
-void saveUserInfo(string _user, string _pass, int amount) {
+void saveUserInfo(string _user, string _pass, float amount) {
     ofstream file;
     file.open(_user + ".txt");
     file << _user << endl 
          << _pass << endl 
-         << amount;
+         << fixed << setprecision(2) << amount;
     file.close();
 }
 
@@ -413,7 +413,7 @@ bool login() {
         G_name = _name;
         loggedIn = asUser;
         G_password = _pass;
-        G_balance = stoi(_balance);
+        G_balance = stof(_balance);
         return true;
     }
 
