@@ -156,6 +156,7 @@ int main() {
     while (true) {
         cls();
         welcomeScreen();
+        accountReset();
 
         for (i = 0; i < 4; i++) {
             showItem(i, login_words[i]);
@@ -298,8 +299,8 @@ void saveUserInfo(string _user, string _pass, int amount) {
     ofstream file;
     file.open(_user + ".txt");
     file << _user << endl 
-            << _pass << endl 
-            << amount;
+         << _pass << endl 
+         << amount;
     file.close();
 }
 
@@ -364,6 +365,7 @@ void menuScreen() {
             break;
         case 5:
             checkOut();
+            pause();
             resetCart();
 
             // If the customer is a guest return to login system
@@ -695,72 +697,77 @@ void checkOut() {
     int payment_method, discount_mode;
     float subtotal = showCart();
 
-    if (subtotal > 0) {
-        while (true) {
-            showCategory("Checkout");
+    if (subtotal <= 0) return;
 
-            cout << "\t\tPlease enter mode of payment:" << endl
-                 << "\t\t[1] Cash" << endl;
+    while (true) {
+        showCategory("Checkout");
 
-            if (loggedIn == asUser || loggedIn > asAdmin) {
-                cout << "\t\t[2] Charge to Account" << endl;
-            }
-            cout << "\n\t\t> ";
-            cin >> payment_method;
-            cout << endl;
+        cout << "\t\tPlease enter mode of payment:" << endl
+                << "\t\t[1] Cash" << endl;
 
-            if ((payment_method == 1) || 
-                ((payment_method == 2) && (loggedIn == asUser || loggedIn > asAdmin))) {
-              cls();
-              showCart();
-            }
+        if (loggedIn == asUser || loggedIn > asAdmin) {
+            cout << "\t\t[2] Charge to Account" << endl;
+        }
 
-            cout << endl << endl;
-            cout << "\t\tVouchers/Discounts:" << endl
-                 << "\t\t[1] Senior Citizen/Person with Disability" << endl
-                 << "\t\t[2] Promo Voucher" << endl
-                 << "\t\t[3] None" << endl
-                 << "\n\t\t> ";
+        cout << "\n\t\t> ";
+        cin >> payment_method;
+        cout << endl;
+
+        if ((payment_method == 1) || 
+            ((payment_method == 2) && (loggedIn == asUser || loggedIn > asAdmin))) {
+
+            cout << endl
+                << "\t\tVouchers/Discounts:" << endl
+                    << "\t\t[1] Senior Citizen/Person with Disability" << endl
+                    << "\t\t[2] Promo Voucher" << endl
+                    << "\t\t[3] None" << endl
+                    << "\n\t\t> ";
             cin >> discount_mode;
             cout << endl;
 
             if (discount_mode == 1 || discount_mode == 2 || discount_mode == 3) {
-              break;
-            } else {
-              cls();
-              showCart();
+                break;
             }
-        }
+
+        } 
+
+        cls();
+        showCart();
     }
 
     switch (discount_mode) {
     case 1:
       cout << "\t\tYou have a 20% discount applied." << endl;;
-      subtotal = subtotal * 0.80;
+      subtotal = subtotal * 0.8;
       break;
     case 2:
-      bool with_voucher;
-      while (!with_voucher) {
+      int with_voucher;
+      do {
+        with_voucher = notYet;
         string voucher_code;
         cout << "\t\tPlease enter your voucher code or type QUIT to exit:" << endl
              << "\t\t> ";
+
         cin >> voucher_code;
-        if (voucher_code == "QUIT") {
-          with_voucher = false;
+        if (voucher_code.compare("QUIT") == 0) {
+          with_voucher = 0;
+          break;
         }
         for (int idx = 0; idx < 4; idx++) {
           if (voucher_code.compare(G_vouchers[idx]) == 0) {
-            with_voucher = true;
+            with_voucher = 1;
+            break;
           }
         }
-      }
+      } while (with_voucher == notYet);
+
       if (with_voucher) {
         double discount;
         discount = 10 + rand() % 30;
         cout << endl;
-        cout << "\t\tYou have a "
+        cout << "\t\tA "
              << discount
-             << "% discount applied."
+             << "% discount was applied."
              << endl;
         subtotal = subtotal * ((100 - discount) / 100);
       }
@@ -783,10 +790,10 @@ void checkOut() {
             } else if (payment == subtotal) {
                 cout << "\t\tThank you!" << endl;
                 break;
-            } else {
-                cout << endl;
-                cout << "\t\tInvalid Payment!" << endl;
             }
+            
+            cout << endl;
+            cout << "\t\tInvalid Payment!" << endl;
         }
         break;
     case 2:
@@ -794,21 +801,19 @@ void checkOut() {
             cout << "\t\tYour account has insufficient balance,\n\t\tplease top up or try another payment method";
             pause();
             return checkOut();
-        } else {
-            G_balance -= subtotal;
-
-            //Since G_balance doesn't point to the original element
-            if (loggedIn > -1) {
-                G_balances[loggedIn] = G_balance;
-            }
-
-            G_current_sales += subtotal;
-            cout << "\t\t Successfuly charged to account!";
-            saveUserInfo(G_name, G_password, G_balance);
         }
+        G_balance -= subtotal;
+
+        //Since G_balance doesn't point to the original element
+        if (loggedIn > -1) {
+            G_balances[loggedIn] = G_balance;
+        }
+
+        G_current_sales += subtotal;
+        cout << "\t\t Successfuly charged to account!";
+        saveUserInfo(G_name, G_password, G_balance);
         break;
     }
-    pause();
 }
 
 void transRecord(){
