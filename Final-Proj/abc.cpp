@@ -253,6 +253,8 @@ void userProfile() {
             if (loggedIn == asUser) {
                 saveUserInfo(G_name, G_password, G_balance);
             } 
+            cout << "\n\t\t Top up success!";
+            pause();
         } else if (action == 2){
             break;
         } else userProfile();
@@ -427,8 +429,8 @@ bool login() {
     for (i = 0; i < G_sampleSize; i++) {
         if ( (G_name.compare(G_usernames[i]) == 0) && (G_password.compare(G_passwords[i]) == 0) ) {
             loggedIn = i;
-            G_name = _name;
-            G_password = _pass;
+            G_name = G_usernames[i];
+            G_password = G_passwords[i];
             //Todo
             G_balance = G_balances[i];
             return true;
