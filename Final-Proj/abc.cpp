@@ -308,11 +308,8 @@ void saveUserInfo(string _user, string _pass, float amount) {
 void accountRegistration() {
     cls();
     welcomeScreen();
-    cout << "\t\tType a username and password to register.\n";
-    cout << "\n\t\t" << ARROW << "Select Username: ";
-    cin >> G_name;
-    cout << "\t\t" << ARROW << "Select Password: ";
-    cin >> G_password;
+    cout << "\t\tType a username and password to register.";
+    askCredentials();
 
     const int min_top_up = 100;
     int amount;
@@ -407,6 +404,7 @@ void randomizeStocks() {
 bool login() {    
     cls();
     welcomeScreen();
+    cout << "\t\tEnter username and password to login...";
     askCredentials();
 
     string _name, _pass, _balance;
@@ -448,7 +446,6 @@ void accountReset() {
 }
 
 void askCredentials()  {
-    cout << "\t\tEnter your username and password.";
     cout << "\n\n\t\t" << ARROW << "Username: ";
     cin >> G_name;
     cout << "\t\t" << ARROW << "Password: ";
@@ -458,6 +455,7 @@ void askCredentials()  {
 bool adminlogin() {
     cls();
     welcomeScreen();
+    cout << "\t\tEnter administrator username and password.";
     askCredentials();
     for (i = 0; i < 1; i++) {
         if (
