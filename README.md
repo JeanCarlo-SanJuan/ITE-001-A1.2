@@ -1,4 +1,4 @@
-# ITE-001-Prelim-G2
+# ITE-001-G2
 
 Members:
 1) Estiquio, Cyrill
